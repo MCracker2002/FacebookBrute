@@ -26,7 +26,7 @@ download complete!
 
 and you will see script options
 
-example:> FB-BrForAttack.py -T Oseid@gmail.com -W /usr/share/wordlists/rockyou.txt
+example:> ./FB-BrForAttack.py -T Oseid@gmail.com -W /usr/share/wordlists/rockyou.txt
 
 # that's all :)
 
