@@ -57,7 +57,7 @@ def Main():
 		 os.system("clear || cls")
 		 print("\n[*]website>: www.facebook.com ")
 		 time.sleep(1)
-		 flushPrint("\n[+]Target Email>: "+str(user))
+		 print("\n[+]Target Email>: "+str(user))
 		 time.sleep(1.2)
 		 print("\n[@]Wlist>: "+str(passw))
 		 time.sleep(1)
