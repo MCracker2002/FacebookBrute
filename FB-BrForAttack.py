@@ -5,7 +5,6 @@
 try:
  ##----------- Import Libraries -----------##
  import socket,time,os,optparse,mechanize  ##
- from sys import stdout as std             ##
  ##----------------------------------------##
 except:
 	print("[!] The [ mechanize library ] is Missing!\n[*] Please Install it Using this command> [ pip install mechanize ]")
