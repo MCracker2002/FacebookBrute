@@ -75,7 +75,7 @@ def Main():
                  br.method="POST"
                  res = br.submit()
                  if "home_icon" in res.get_data():
-                     print("[+]~[{}] Testing Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
+                     print("[+]~[{}] Testing Password[ {} ]  ==> Yes :)".format(lo,password))
                      print ("\n[*] Found! Password is ==> "+ password)
                      break
                  else:
