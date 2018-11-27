@@ -23,7 +23,7 @@ def check():                                      #
 check = check()                                   #
 ###################################################
 
-parse = optparse.OptionParser("""\nUsage: python ./FB-BrForAttack.py -T <Target Email> -W <Wordlist file>
+parse = optparse.OptionParser("""\nUsage: python ./FB-BrForAttack.py -T [TARGET]<Email/ID> -W <Wordlist file>
 
 OPTIONS:
         -t <target email>        ::>   Set target Email
@@ -31,6 +31,8 @@ OPTIONS:
 
 Example:
         ./FB-BrForAttack.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
+	./FB-BrForAttack.py -t 100001013078780 -w /usr/share/wordlists/rockyou.txt
+
 """)
 def Main():
    parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
