@@ -26,8 +26,8 @@ check = check()                                   #
 parse = optparse.OptionParser("""\nUsage: python ./FB-BrForAttack.py -T [TARGET]<Email/ID> -W <Wordlist file>
 
 OPTIONS:
-        -t <target email>        ::>   Set target Email
-        -w <word list file>      ::>   Set Wordlist File 
+        -t <target email> [OR] <FACEBOOK ID>        ::>   Set target Email [OR] Target Profile ID
+        -w <word list file>                         ::>   Set Wordlist File 
 
 Example:
         ./FB-BrForAttack.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
