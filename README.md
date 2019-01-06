@@ -3,9 +3,9 @@
   -    JOB: **Brute Force Attack On Facebook Accounts**
 ***
 
-- **SCRIPT ScreeenShot:
+- **SCRIPT ScreeenShot**:
 
-    - **Usage:
+    - **Usage**:
     
       ![usage](https://user-images.githubusercontent.com/29546157/50734835-cbef9000-11ad-11e9-81d6-84893047f088.PNG)
 
@@ -42,7 +42,7 @@
 - [x] Android~**Termux**
 - [x] MacOs
 ***
- - Supported Python **Python2.7**
+ - Supported Python: **Python2.7**
 ***
 
 
