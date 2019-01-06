@@ -80,7 +80,7 @@ def FBOM(username, wordlist, proxy=None):
         test = open(wordlist, "r")
         test.close()
     except IOError:
-        print(rd+"\n["+yl+""+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
+        print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
     if proxy !=None:
         print(wi+"["+yl+"~"+wi+"] Checking "+yl+"HTTP "+wi+"Proxy[ {}:80 ]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
@@ -174,7 +174,7 @@ def FBOM(username, wordlist, proxy=None):
             wfile.close()
             exit(1)
         except Exception, e:
-            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+e+wi)
+            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
             wfile.close()
             exit(1)
             
