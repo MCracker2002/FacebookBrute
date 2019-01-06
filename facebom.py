@@ -175,7 +175,7 @@ def FBOM(username, wordlist, proxy=None):
             wfile.close()
             exit(1)
         except Exception, e:
-            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+e+wi)
+            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
             wfile.close()
             exit(1)
             
