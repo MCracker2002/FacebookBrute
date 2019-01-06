@@ -36,7 +36,7 @@
  - pip install requests
  - pip install mechanize
  
-# Supported System:
+# Supported Platforms:
 - [x] Windows
 - [x] Linux
 - [x] Android~**Termux**
