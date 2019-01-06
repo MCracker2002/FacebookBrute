@@ -74,7 +74,7 @@ def ID(url):
 def FBOM(username, wordlist, proxy=None):
     
     if cnet() !=True:
-        print(rd+"\n["+yl+""+yl+" Please Check Your Intenrnet Connection "+rd+"!!!"+wi)
+        print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Please Check Your Intenrnet Connection "+rd+"!!!"+wi)
         exit(1)
     try:
         test = open(wordlist, "r")
