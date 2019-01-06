@@ -22,7 +22,7 @@
     
     ![withProxy](https://user-images.githubusercontent.com/29546157/50734872-5637f400-11ae-11e9-8a23-30026bcca8c6.PNG)
 
-   - **Get Target Facebook Profile ID:
+   - **Get Target Facebook Profile ID**:
    
     * **Command**: python -g https://www.facebook.com/alanwalker97
     
