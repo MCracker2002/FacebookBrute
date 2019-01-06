@@ -1,37 +1,52 @@
-# FB-BrForAttack
+***
+  - SCRIPT: **Facebom**
+  -    JOB: **Brute Force Attack On Facebook Accounts**
+***
 
-- A Python script for Brute Force Attack On Facebook Account :)
+- **SCRIPT ScreeenShot:
 
-![](https://scontent.fjrs3-1.fna.fbcdn.net/v/t1.0-9/21762118_159877941261220_8395962401091519807_n.jpg?oh=c8028a37fd2f0c1678ffe8b85d13ab5d&oe=5A557008)
+    - **Usage:
+    
+      ![usage](https://user-images.githubusercontent.com/29546157/50734835-cbef9000-11ad-11e9-81d6-84893047f088.PNG)
 
-# How you install the script
 
-1 > open your termnal
+    - **Brute Force On Facebook Account Without proxy**:
+     
+     * **Command**: python facebom.py -t Oseid@gmail.com -w wlist.txt
+     
+     ![withoutProxy](https://user-images.githubusercontent.com/29546157/50734858-196bfd00-11ae-11e9-8af5-7435ddbf241a.PNG)
+   
+   - **Brute Force On Facebook Account With Proxy(HTTP)**:
+   
+    * **Command**: python facebom.py -t Oseid@gmail.com -w wlist.txt -p 35.236.37.121
+    
+    ![withProxy](https://user-images.githubusercontent.com/29546157/50734872-5637f400-11ae-11e9-8a23-30026bcca8c6.PNG)
 
-2 > type this command:> git clone https://github.com/Oseid/FB-BrForAttack.git
+   - **Get Target Facebook Profile ID:
+   
+    * **Command**: python -g https://www.facebook.com/alanwalker97
+    
+    ![getID](https://user-images.githubusercontent.com/29546157/50734890-9bf4bc80-11ae-11e9-9a66-83f78df8f7ab.PNG)
 
-3 > open script Folder from termnal 
 
-4 > type this command:> chmod+x  FB-BrForAttack.py
+# For Install:
 
-download complete!
+ - git clone https://github.com/Oseid/Facebom.git
+ - cd Facebom/
+ - pip install requests
+ - pip install mechanize
+ 
+# Supported System:
+- [x] Windows
+- [x] Linux
+- [x] Android~**Termux**
+- [x] MacOs
+***
+ - Supported Python **Python2.7**
+***
 
-# Usage:
 
-1 > check nternet connction
-
-2 > open tool folder from termnal 
-
-3 > type this command python FB-BrForAttack.py 
-
-and you will see script options
-
-example:> ./FB-BrForAttack.py -T Oseid@gmail.com -W /usr/share/wordlists/rockyou.txt
-
-# that's all :)
-
-by Oseid Aldary
-
-thanks 4 using
-
-have a nice day :)
+# That's All :)
+   * This Script By Oseid Aldary
+   * Thanks For Usage
+   * Have A Nice Day...GoodBye :)
