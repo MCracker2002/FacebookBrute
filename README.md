@@ -24,7 +24,7 @@
 
    - **Get Target Facebook Profile ID**:
    
-    * **Command**: python -g https://www.facebook.com/alanwalker97
+    * **Command**: python facebom.py -g https://www.facebook.com/alanwalker97
     
     ![getID](https://user-images.githubusercontent.com/29546157/50734890-9bf4bc80-11ae-11e9-9a66-83f78df8f7ab.PNG)
 
