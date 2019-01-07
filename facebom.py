@@ -96,7 +96,7 @@ def FBOM(username, wordlist, proxy=None):
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+""+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+yl+"] Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
             proxy = proxy.split(":")[0]
@@ -111,7 +111,7 @@ def FBOM(username, wordlist, proxy=None):
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+""+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+yl+"] Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
     else:
         useproxy = False
