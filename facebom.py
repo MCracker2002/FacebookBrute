@@ -12,7 +12,7 @@ try:
  ##-----------------------------------------------------------##
 except ImportError,e:
         e = e[0][16:]
-	print("[\n[*] Please Install it Using this command> [ pip install "+e+" ]")
+	print("[!] ImportError: ["+e+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+e+" ]")
 	exit(1)
 os.system("cls||clear")
 
