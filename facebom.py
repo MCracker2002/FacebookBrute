@@ -98,11 +98,15 @@ def FBOM(username, wordlist, proxy=None):
                 		exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid IPv4 Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
             proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
+		if not port.isdigit() or int(port) <1 or int(port) > 65535:
+			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Proxy Port["+port+"] "+rd+"!!!"+wi)
+			exit(1)
+			      
                 if cpro(proxy, port=port) == True:
                     print(wi+"["+gr+"Connected"+wi+"]")
                     useproxy = proxy+":"+port
@@ -113,7 +117,7 @@ def FBOM(username, wordlist, proxy=None):
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid IPv4 Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
     else:
         useproxy = False
@@ -230,6 +234,7 @@ def Main():
        exit(1)
 if __name__=='__main__':
   Main()
+
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
