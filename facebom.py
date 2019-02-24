@@ -103,7 +103,7 @@ def FBOM(username, wordlist, proxy=None):
         else:
             proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
-		if not port.isdigit() or int(port) <1 or int(port) > 65535:
+		if not port.isdigit() or int(port) <0 or int(port) > 65535:
 			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Proxy Port["+port+"] "+rd+"!!!"+wi)
 			exit(1)
 			      
