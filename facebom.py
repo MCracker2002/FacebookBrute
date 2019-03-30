@@ -1,6 +1,5 @@
-#/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 ######################
 # SCRIPT : Facebom
 #    JOB : Brute Force Attack On Facebook Accounts
