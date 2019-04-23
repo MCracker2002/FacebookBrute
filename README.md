@@ -28,6 +28,7 @@
     
     ![getID](https://user-images.githubusercontent.com/29546157/50734890-9bf4bc80-11ae-11e9-9a66-83f78df8f7ab.PNG)
 
+***
 
 # For Install:
 
@@ -35,16 +36,17 @@
  - cd Facebom/
  - pip install requests
  - pip install mechanize
- 
+***
+
 # Supported Platforms:
 - [x] Windows
 - [x] Linux
 - [x] Android~**Termux**
 - [x] MacOs
+- [x] **any system has python2.7 with required modules**
 ***
  - Supported Python: **Python2.7**
 ***
-
 
 # That's All :)
    * This Script By Oseid Aldary
