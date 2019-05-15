@@ -7,7 +7,7 @@
 
     - **Usage**:
     
-      ![usage](https://user-images.githubusercontent.com/29546157/50734835-cbef9000-11ad-11e9-81d6-84893047f088.PNG)
+      ![options](https://user-images.githubusercontent.com/29546157/57753444-d63e0f80-76f4-11e9-8ce5-05d8e69392f0.PNG)
 
 
     - **Brute Force On Facebook Account Without proxy**:
