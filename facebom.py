@@ -60,7 +60,6 @@ class FaceBoom(object):
                     print(errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]"))
                     sys.exit(1)
              check = self.proxy+":8080" if not ":" in self.proxy else self.proxy
-             print("check", check)
              if self.check_proxy(check):
                 print(wi+"["+gr+"Connected"+wi+"]")
                 self.useProxy = check
@@ -247,6 +246,7 @@ def Main():
    if options.taremail !=None and options.wlst !=None and options.proxy !=None:
        FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst, proxy=options.proxy)
        FBOM.start()
+    
    elif options.taremail !=None and options.single !=None and options.proxy !=None:
        FBOM = FaceBoom(target=options.taremail, singal_passwd=options.single, proxy=options.proxy)
        FBOM.start()
