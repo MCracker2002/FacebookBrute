@@ -43,10 +43,8 @@
 - [x] Linux
 - [x] Android~**Termux**
 - [x] MacOs
-- [x] **any system has python2.7 with required modules**
-***
- - Supported Python: **Python2.7**
-***
+- [x] **any Os has python(2.x, 3.x) with required modules**
+
 
 # That's All :)
    * This Script By Oseid Aldary
