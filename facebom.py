@@ -29,7 +29,6 @@ except ImportError:
     print("  [*] Please Use: 'pip install mechanize' to install it :)")
     sys.exit(1)
 
-
 class FaceBoom(object):
 
 
@@ -149,21 +148,18 @@ class FaceBoom(object):
             currentVersion = vf.read().strip()
         if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
         else:
-            ask = input("  [?] An update has been found, do you want to update now?(Y:n)> ").strip()
-            while not ask:ask = input("    [!] please Answer with 'y' for yes or 'n' for no ?> ").strip()
-            if ask.lower() in ("yes","y"):
-                write("\n[~] Updating...please wait\n")
+                print("  [+] An update has been found ::: Updating... ")
                 newCode = requests.get("https://raw.githubusercontent.com/Oseid/Facebom/master/facebom.py").text
-             with open("facebom.py", "wb") as  facebomScript:
+                with open("facebom.py", "w") as  facebomScript:
                    facebomScript.write(newCode)
-             with open("core"+os.sep+"version.txt", "w") as ver:
-                   ver.write(repoVersion)
-             write("  [+] Successfully updated :)\n")
-
-        else:write("\n[*] Ok Maybe later :)\n")
+                with open("core"+os.sep+"version.txt", "w") as ver:
+                     ver.write(repoVersion)
+                write("  [+] Successfully updated :)\n")
 
     def start(self):
         if self.update:
+            self.updateFaceBoom()
+            sys.exit(1)
         if self.target_profile:
             self.get_profile_id()
             sys.exit(1)
@@ -294,7 +290,6 @@ def Main():
 
 if __name__=='__main__':
     Main()
-
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
