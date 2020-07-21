@@ -48,15 +48,15 @@
 
 # Protection yourself from this attack:
   * Use Strong Password which contains {letters(lower,upper),tokens,numbers} make it longest as possible, at least 10 letters
-  * don't use yourmy basic information in the password for example don't use your name or birthday\
-        because the hacker can do a information gathering attack and get this information easily then\
-        he will create a wordlist bassed on this infخ
+  * don't use your basic information in the password for example don't use your name or birthday\
+        because the hacker can do a information gathering attack and get this information easily\
+        them he will generate a wordlist based on this info
   * Use 2F Authentication.
   
 # Warning:
-  * this script  is only for educational purposes
-  * i am not responsible for your actions
-  
+  * this script is only for educational purposes
+  * i am not responsible for your actions.
+
 # That's All :)
    * This Script By Oseid Aldary
    * Thanks For Usage
