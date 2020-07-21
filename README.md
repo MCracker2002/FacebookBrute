@@ -1,5 +1,5 @@
 ***
-  - SCRIPT: **Facebom**
+  - SCRIPT: **FaceBoom**
   -    JOB: **Brute Force Attack On Facebook Accounts**
 ***
 
@@ -12,19 +12,19 @@
 
     - **Brute Force On Facebook Account Without proxy**:
      
-     * **Command**: python facebom.py -t Oseid@gmail.com -w wlist.txt
+     * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt
      
      ![withoutProxy](https://user-images.githubusercontent.com/29546157/88081833-a22c6d00-cb89-11ea-84c6-50ab34fb62a3.PNG)
    
    - **Brute Force On Facebook Account With Proxy(HTTP)**:
    
-    * **Command**: python facebom.py -t Oseid@gmail.com -w wlist.txt -p 35.236.37.121
+    * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt -p 35.236.37.121
     
     ![withProxy](https://user-images.githubusercontent.com/29546157/88081886-b83a2d80-cb89-11ea-893e-0fb77059fe83.PNG)
 
    - **Get Target Facebook Profile ID**:
    
-    * **Command**: python facebom.py -g https://www.facebook.com/zuck
+    * **Command**: python faceboom.py -g https://www.facebook.com/zuck
     
     ![getID](https://user-images.githubusercontent.com/29546157/88082079-f9cad880-cb89-11ea-894b-801e8c4fe369.PNG)
 
@@ -32,8 +32,8 @@
 
 # For Install:
 
- - git clone https://github.com/Oseid/Facebom.git
- - cd Facebom/
+ - git clone https://github.com/Oseid/FaceBoom.git
+ - cd FaceBoom/
  - pip install requests
  - pip install mechanize
 ***
