@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import socket, sys, os, re, random, optparse, time
 if sys.version_info.major <= 2:import httplib
 else:import http.client as httplib
@@ -68,6 +69,7 @@ class FaceBoom(object):
                 errMsg("Unable to connect to Proxy["+rd+str(self.proxy)+yl+"]")
                 sys.exit(1)
 
+
     get_random_user_agent = staticmethod(lambda: random.choice([
                'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.24 (KHTML, like Gecko) RockMelt/0.9.58.494 Chrome/11.0.696.71 Safari/534.24',
                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36',
@@ -87,6 +89,7 @@ class FaceBoom(object):
             if proxy_ip==r.headers['X-Client-IP']: return True
             return False
           except Exception : return False
+
 
     @staticmethod
     def cnet():
@@ -108,6 +111,7 @@ class FaceBoom(object):
         except IndexError:
             errMsg("Please Check Your Victim's Profile URL")
             sys.exit(1)
+
 
     def login(self, password):
         self.br.open("https://facebook.com")
@@ -149,7 +153,8 @@ class FaceBoom(object):
         if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
         else:
                 print("  [+] An update has been found ::: Updating... ")
-                newCode = requests.get("https://raw.githubusercontent.com/Oseid/Facebom/master/facebom.py").text
+                conn.request("GET", "/Oseid/Facebom/master/facebom.py")
+                newCode = conn.getresponse().read().strip().decode()
                 with open("facebom.py", "w") as  facebomScript:
                    facebomScript.write(newCode)
                 with open("core"+os.sep+"version.txt", "w") as ver:
