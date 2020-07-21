@@ -50,7 +50,7 @@
   * Use Strong Password which contains {letters(lower,upper),tokens,numbers} make it longest as possible, at least 10 letters
   * don't use your basic information in the password for example don't use your name or birthday\
         because the hacker can do a information gathering attack and get this information easily\
-        them he will generate a wordlist based on this info
+        then he will generate a wordlist based on this info.
   * Use 2F Authentication.
   
 # Warning:
@@ -58,6 +58,6 @@
   * i am not responsible for your actions.
 
 # That's All :)
-   * This Script By Oseid Aldary
+   * This Script Coded By Oseid Aldary
    * Thanks For Usage
    * Have A Nice Day...GoodBye :)
