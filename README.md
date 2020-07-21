@@ -16,7 +16,7 @@
      
      ![withoutProxy](https://user-images.githubusercontent.com/29546157/88081833-a22c6d00-cb89-11ea-84c6-50ab34fb62a3.PNG)
    
-   - **Brute Force On Facebook Account With Proxy(HTTP)**:
+   - **Brute Force On Facebook Account With Proxy**:
    
     * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt -p 35.236.37.121
     
