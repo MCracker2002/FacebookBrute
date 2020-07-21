@@ -123,10 +123,10 @@ class FaceBoom(object):
 
     def banner(self):
 
-        proxystatus =wi+"["+gr+"ON"+wi+"]" if self.useProxy  else yl+"["+rd+"OFF"+yl+"]"
+        proxystatus = gr+self.useProxy+wi+"["+gr+"ON"+wi+"]" if self.useProxy  else yl+"["+rd+"OFF"+yl+"]"
         print(gr+"""
 ==================================
-[---]        """+wi+"""faceboom"""+gr+"""         [---]
+[---]        """+wi+"""FaceBoom"""+gr+"""        [---]
 ==================================
 [---]  """+wi+"""BruteForce Facebook  """+gr+""" [---]
 ==================================
@@ -214,7 +214,7 @@ class FaceBoom(object):
                               time.sleep(1.5)
                               sys.exit(1)
                         except Exception as e:
-                              print(rd+"["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+                              print(rd+" Error: "+yl+str(e)+wi+"\n")
                               time.sleep(0.60)
                     else:
                           print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+self.wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
