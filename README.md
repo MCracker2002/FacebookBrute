@@ -18,7 +18,7 @@
    
    - **Brute Force On Facebook Account With Proxy**:
    
-    * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt -p 35.236.37.121
+    * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt -p 144.217.101.245:3129
     
     ![withProxy](https://user-images.githubusercontent.com/29546157/88081886-b83a2d80-cb89-11ea-893e-0fb77059fe83.PNG)
 
