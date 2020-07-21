@@ -153,7 +153,7 @@ class FaceBoom(object):
         if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
         else:
                 print("  [+] An update has been found ::: Updating... ")
-                conn.request("GET", "/Oseid/FaceBoom/master/facebom.py")
+                conn.request("GET", "/Oseid/FaceBoom/master/faceboom.py")
                 newCode = conn.getresponse().read().strip().decode()
                 with open("faceboom.py", "w") as  facebomScript:
                    facebomScript.write(newCode)
