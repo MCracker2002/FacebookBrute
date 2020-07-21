@@ -96,13 +96,13 @@ class FaceBoom(object):
         except socket.error:pass
         return False
 
-    @staticmethod
+
     def get_profile_id(self):
         proxies = {} if not self.useProxy else {'https':self.useProxy, 'http':self.useProxy}
         try:
             print(gr+"\n["+wi+"*"+gr+"] geting target Profile Id... please wait"+wi)
             idre = re.compile('"entity_id":"([0-9]+)"')
-            con = requests.get(self.target_profile, proxies=proxies, timeout=5).content
+            con = requests.get(self.target_profile, proxies=proxies, timeout=5).text
             idis = idre.findall(con)
             print(wi+"\n["+gr+"+"+wi+"]"+gr+" Target Profile"+wi+" ID: "+yl+idis[0]+wi)
         except IndexError:
