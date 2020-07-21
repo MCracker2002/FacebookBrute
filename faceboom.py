@@ -146,16 +146,16 @@ class FaceBoom(object):
     def updateFaceBoom():
         write("[~] Checking for updates...\n")
         conn = httplib.HTTPSConnection("raw.githubusercontent.com")
-        conn.request("GET", "/Oseid/Facebom/master/core/version.txt")
+        conn.request("GET", "/Oseid/FaceBoom/master/core/version.txt")
         repoVersion = conn.getresponse().read().strip().decode()
         with open("core"+os.sep+"version.txt") as vf:
             currentVersion = vf.read().strip()
         if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
         else:
                 print("  [+] An update has been found ::: Updating... ")
-                conn.request("GET", "/Oseid/Facebom/master/facebom.py")
+                conn.request("GET", "/Oseid/FaceBoom/master/facebom.py")
                 newCode = conn.getresponse().read().strip().decode()
-                with open("facebom.py", "w") as  facebomScript:
+                with open("faceboom.py", "w") as  facebomScript:
                    facebomScript.write(newCode)
                 with open("core"+os.sep+"version.txt", "w") as ver:
                      ver.write(repoVersion)
