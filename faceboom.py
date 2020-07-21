@@ -237,7 +237,7 @@ OPTIONS:
     |--------
     | -g <TARGET Facebook Profile URL>        ::> Specify Target Facebook Profile URL For Get HIS ID
     |--------
-    | -u/--update                             ::> Update FaceBom Script
+    | -u/--update                             ::> Update FaceBoom Script
 -------------
 Examples:
         |
@@ -246,7 +246,7 @@ Examples:
      |--------
      | python Facebom.py -t 100001013078780 -w C:\\Users\\Me\\Desktop\\wordlist.txt
      |--------
-     | python facebom.py -t Victim@hotmail.com -w D:\\wordlist.txt -p 35.236.37.121 default(port=8080)
+     | python facebom.py -t Victim@hotmail.com -w D:\\wordlist.txt -p 144.217.101.245:3129
      |--------
      | python facebom.py -t Victim@gmail.com -s 1234567
      |--------
