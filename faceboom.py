@@ -185,10 +185,10 @@ def Main():
                         help="Specify TARGET FACEBOOK PROFILE URL to get his ID")
    parse.add_option("-u","-U","--update","--UPDATE", dest="update", action="store_true", default=False)
    (options,args) = parse.parse_args()
-   faceBoom = FaceBoom()
-   if not faceBoom.cnet():
+   if not FaceBoom.cnet():
        errMsg("Please Check Your Internet Connection")
        sys.exit(1)
+   faceboom = FaceBoom()
    target = options.target
    wordlist = options.wordlist
    single_passwd = options.single
@@ -253,12 +253,8 @@ def Main():
        print(parse.usage)
        sys.exit(1)
 
-
-
 if __name__=='__main__':
     Main()
-
-
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
