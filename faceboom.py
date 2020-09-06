@@ -14,6 +14,7 @@ os.system("cls||clear")
 def write(text):
     sys.stdout.write(text)
     sys.stdout.flush()
+
 versionPath = "core"+os.sep+"version.txt"
 
 errMsg = lambda msg: write(rd+"\n["+yl+"!"+rd+"] Error: "+yl+msg+rd+ " !!!\n"+wi)
@@ -197,8 +198,7 @@ def Main():
    target_profile = options.url
    update = options.update
    opts = [target,wordlist,single_passwd, proxy, target_profile, update]
-   if not any(opt for opt in opts):pass
-   else:
+   if any(opt for opt in opts):
      if not faceboom.cnet():
        errMsg("Please Check Your Internet Connection")
        sys.exit(1)
@@ -260,8 +260,11 @@ def Main():
        print(parse.usage)
        sys.exit(1)
 
+
 if __name__=='__main__':
     Main()
+
+
 ##############################################################
 #####################                #########################
 #####################   END OF TOOL  #########################
